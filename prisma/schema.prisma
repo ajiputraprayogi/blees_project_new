@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // ubah dari mysql
+  url      = env("DATABASE_URL")
+}
+
+model permissions {
+  id                   Int                    @id @default(autoincrement())
+  name                 String                 @unique
+  role_has_permissions role_has_permissions[]
+}
+
+model role_has_permissions {
+  role_id       Int
+  permission_id Int
+  roles         roles       @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+  permissions   permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+
+  @@id([role_id, permission_id])
+  @@index([permission_id])
+}
+
+model roles {
+  id                   Int                    @id @default(autoincrement())
+  name                 String                 @unique
+  role_has_permissions role_has_permissions[]
+  user_roles           user_roles[]
+}
+
+model user_roles {
+  user_id Int
+  role_id Int
+  users   users @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+  roles   roles @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+
+  @@id([user_id, role_id])
+  @@index([role_id])
+}
+
+model users {
+  id         Int          @id @default(autoincrement())
+  nama       String
+  email      String       @unique
+  password   String
+  user_roles user_roles[]
+}
