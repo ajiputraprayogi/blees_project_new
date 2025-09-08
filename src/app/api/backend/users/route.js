@@ -4,14 +4,19 @@ import { prisma } from "@/lib/db";
 export async function GET() {
   try {
     const users = await prisma.users.findMany({
-      include: {
+      select: {
+        id: true,
+        nama: true,
+        email: true,
         user_roles: {
-          include: {
+          take: 1,
+          select: {
             roles: true,
           },
         },
       },
     });
+
 
     // Map users agar hanya kirim data user dan role (ambil role pertama)
     const usersWithRole = users.map(user => ({

@@ -3,7 +3,13 @@ import { prisma } from "@/lib/db";
 
 export async function GET() {
   try {
-    const permissions = await prisma.permissions.findMany();
+    const permissions = await prisma.permissions.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+      orderBy: { id: "asc" },
+    });
     return NextResponse.json(permissions);
   } catch (error) {
     console.error("Prisma error:", error);
