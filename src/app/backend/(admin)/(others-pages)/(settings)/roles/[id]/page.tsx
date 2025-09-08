@@ -7,6 +7,7 @@ import ComponentCard from "@/components/common/ComponentCard";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
 import Button from "@/components/ui/button/Button";
+import { usePermissions } from "@/context/PermissionsContext"; // 🔹 import hook
 
 type Permission = {
   id: number;
@@ -29,6 +30,7 @@ let permissionsCache: Permission[] | null = null;
 export default function EditRole() {
   const router = useRouter();
   const params = useParams();
+  const { refresh } = usePermissions(); // 🔹 ambil fungsi refresh dari context
 
   const [name, setName] = useState("");
   const [permissions, setPermissions] = useState<Permission[]>(permissionsCache || []);
@@ -43,12 +45,10 @@ export default function EditRole() {
 
     async function fetchData() {
       try {
-        // ✅ kalau cache sudah ada, gunakan langsung
         if (permissionsCache) {
           setPermissions(permissionsCache);
         }
 
-        // ✅ jalankan fetch paralel
         const [roleRes, permRes] = await Promise.all([
           fetch(`/api/backend/roles/${params.id}`, { signal: abortController.signal }),
           permissionsCache
@@ -67,7 +67,7 @@ export default function EditRole() {
         if (permRes) {
           if (!permRes.ok) throw new Error("Gagal memuat permissions");
           const permData: Permission[] = await permRes.json();
-          permissionsCache = permData; // ✅ simpan ke cache
+          permissionsCache = permData;
           setPermissions(permData);
         }
       } catch (error) {
@@ -84,7 +84,6 @@ export default function EditRole() {
     return () => abortController.abort();
   }, [params.id]);
 
-  // Toggle checkbox permission
   function togglePermission(id: number) {
     setSelectedPermissionIds((prev) =>
       prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
@@ -106,6 +105,9 @@ export default function EditRole() {
       });
 
       if (!res.ok) throw new Error("Gagal update role");
+
+      // 🔹 refresh permissions di context agar data terbaru langsung berlaku
+      await refresh();
 
       router.push("/backend/roles");
     } catch (error) {
