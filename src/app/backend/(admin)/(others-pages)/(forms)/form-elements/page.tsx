@@ -13,7 +13,7 @@ import { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Projek Pertamaku",
+  title: "Bless - Next.js Tailwind CSS Admin Dashboard Template",
   description:
     "This is Next.js Form Elements page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
 };
