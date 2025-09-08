@@ -89,7 +89,7 @@ export default function PermissionsPage() {
         <PageBreadcrumb pageTitle="Data Permissions" />
         <ComponentCard
           title="Data Permissions Table"
-          headerRight={canAdd && <AddPermissionsButton />}
+          // headerRight={canAdd && <AddPermissionsButton />}
         >
           <SkeletonTable />
         </ComponentCard>
@@ -102,7 +102,7 @@ export default function PermissionsPage() {
       <PageBreadcrumb pageTitle="Data Permissions" />
       <ComponentCard
         title="Data Permissions Table"
-        headerRight={canAdd && <AddPermissionsButton />}
+        // headerRight={canAdd && <AddPermissionsButton />}
       >
         <Table>
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
@@ -125,16 +125,17 @@ export default function PermissionsPage() {
                   </span>
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-center text-theme-sm dark:text-gray-400">
-                  {canEdit && (
+                  <span className="text-gray-400">No Actions</span>
+                  {/* {canEdit && (
                     <Button size="xs" variant="warning" onClick={() => handleEdit(permission.id)}>
                       Edit
                     </Button>
-                  )}
-                  {canDelete && (
+                  )} */}
+                  {/* {canDelete && (
                     <Button size="xs" variant="danger" className="ml-2" onClick={() => handleDelete(permission.id)}>
                       Delete
                     </Button>
-                  )}
+                  )} */}
                   {!canEdit && !canDelete && (
                     <span className="text-gray-400">No Actions</span>
                   )}
