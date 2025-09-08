@@ -23,23 +23,39 @@ type RoleWithPermissions = {
   role_has_permissions: RoleHasPermission[];
 };
 
+// ✅ Cache global biar permissions tidak di-fetch berulang
+let permissionsCache: Permission[] | null = null;
+
 export default function EditRole() {
   const router = useRouter();
   const params = useParams();
 
   const [name, setName] = useState("");
-  const [permissions, setPermissions] = useState<Permission[]>([]);
+  const [permissions, setPermissions] = useState<Permission[]>(permissionsCache || []);
   const [selectedPermissionIds, setSelectedPermissionIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
+    if (!params.id) return;
+
+    let abortController = new AbortController();
+
     async function fetchData() {
       try {
-        if (!params.id) throw new Error("Role ID tidak ditemukan");
+        // ✅ kalau cache sudah ada, gunakan langsung
+        if (permissionsCache) {
+          setPermissions(permissionsCache);
+        }
 
-        // Fetch role detail termasuk permissions yang sudah dipilih
-        const roleRes = await fetch(`/api/backend/roles/${params.id}`);
+        // ✅ jalankan fetch paralel
+        const [roleRes, permRes] = await Promise.all([
+          fetch(`/api/backend/roles/${params.id}`, { signal: abortController.signal }),
+          permissionsCache
+            ? null
+            : fetch("/api/backend/permissions", { signal: abortController.signal }),
+        ]);
+
         if (!roleRes.ok) throw new Error("Gagal memuat role");
         const roleData: RoleWithPermissions = await roleRes.json();
 
@@ -48,16 +64,15 @@ export default function EditRole() {
           roleData.role_has_permissions.map((rp) => rp.permission_id)
         );
 
-        // Fetch semua permissions
-        const permRes = await fetch("/api/backend/permissions");
-        if (!permRes.ok) throw new Error("Gagal memuat permissions");
-        const permData: Permission[] = await permRes.json();
-        setPermissions(permData);
+        if (permRes) {
+          if (!permRes.ok) throw new Error("Gagal memuat permissions");
+          const permData: Permission[] = await permRes.json();
+          permissionsCache = permData; // ✅ simpan ke cache
+          setPermissions(permData);
+        }
       } catch (error) {
-        if (error instanceof Error) {
-          alert(error.message || "Terjadi kesalahan");
-        } else {
-          alert("Terjadi kesalahan tidak diketahui");
+        if ((error as any).name !== "AbortError") {
+          alert(error instanceof Error ? error.message : "Terjadi kesalahan");
         }
       } finally {
         setInitialLoading(false);
@@ -65,6 +80,8 @@ export default function EditRole() {
     }
 
     fetchData();
+
+    return () => abortController.abort();
   }, [params.id]);
 
   // Toggle checkbox permission
@@ -92,11 +109,7 @@ export default function EditRole() {
 
       router.push("/backend/roles");
     } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message || "Gagal update role");
-      } else {
-        alert("Terjadi kesalahan tidak diketahui");
-      }
+      alert(error instanceof Error ? error.message : "Gagal update role");
     } finally {
       setLoading(false);
     }
@@ -135,17 +148,21 @@ export default function EditRole() {
           <div>
             <Label>Permissions</Label>
             <div className="grid grid-cols-2 gap-2 max-h-48 overflow-auto border rounded p-2">
-              {permissions.map((perm) => (
-                <label key={perm.id} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedPermissionIds.includes(perm.id)}
-                    onChange={() => togglePermission(perm.id)}
-                    disabled={loading}
-                  />
-                  <span>{perm.name}</span>
-                </label>
-              ))}
+              {permissions.length === 0 ? (
+                <p className="text-gray-500">Memuat permissions...</p>
+              ) : (
+                permissions.map((perm) => (
+                  <label key={perm.id} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedPermissionIds.includes(perm.id)}
+                      onChange={() => togglePermission(perm.id)}
+                      disabled={loading}
+                    />
+                    <span>{perm.name}</span>
+                  </label>
+                ))
+              )}
             </div>
           </div>
 

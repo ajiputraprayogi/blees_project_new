@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
 import Select from "@/components/form/Select";
 import Button from "@/components/ui/button/Button";
-
-// ... import statements tetap sama
 
 type RoleOption = {
   value: number;
@@ -21,6 +19,9 @@ interface User {
   roleId: number | null;
 }
 
+// ✅ Cache roles di memory (global scope)
+let rolesCache: RoleOption[] | null = null;
+
 export default function EditUserForm({ user }: { user: User }) {
   const router = useRouter();
 
@@ -28,13 +29,23 @@ export default function EditUserForm({ user }: { user: User }) {
   const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [roleOptions, setRoleOptions] = useState<RoleOption[]>([]);
+  const [roleOptions, setRoleOptions] = useState<RoleOption[]>(rolesCache || []);
   const [selectedRole, setSelectedRole] = useState<number | "">(user.roleId ?? "");
 
   useEffect(() => {
+    const abortController = new AbortController();
+
     async function fetchRoles() {
+      if (rolesCache) {
+        setRoleOptions(rolesCache);
+        return;
+      }
+
       try {
-        const res = await fetch("/api/backend/roles");
+        const res = await fetch("/api/backend/roles", {
+          signal: abortController.signal,
+          cache: "force-cache", // biar nextjs re-use request kalau ada
+        });
         if (!res.ok) throw new Error("Failed to fetch roles");
 
         const data = await res.json();
@@ -43,22 +54,28 @@ export default function EditUserForm({ user }: { user: User }) {
           label: role.name,
         }));
 
+        rolesCache = options; // ✅ simpan ke cache global
         setRoleOptions(options);
 
-        // Validasi jika roleId user tidak ada di options
-        if (user.roleId && !options.some((opt: RoleOption) => opt.value === user.roleId)) {
+        if (user.roleId && !options.some((opt) => opt.value === user.roleId)) {
           setSelectedRole("");
         }
       } catch (error) {
-        console.error("Gagal ambil roles:", error);
-        setRoleOptions([]);
+        if ((error as any).name !== "AbortError") {
+          console.error("Gagal ambil roles:", error);
+          setRoleOptions([]);
+        }
       }
     }
 
     fetchRoles();
+
+    return () => {
+      abortController.abort(); // ✅ cancel fetch kalau komponen unmount
+    };
   }, [user.roleId]);
 
-  // Jika props user berubah, update state form
+  // Update state form kalau props user berubah
   useEffect(() => {
     setNama(user.nama);
     setEmail(user.email);
@@ -136,9 +153,10 @@ export default function EditUserForm({ user }: { user: User }) {
             const num = Number(val);
             if (!isNaN(num)) setSelectedRole(num);
           }}
-          placeholder="Pilih Role"
+          placeholder={roleOptions.length ? "Pilih Role" : "Memuat..."}
           className="dark:bg-dark-900"
           defaultValue=""
+          disabled={loading || roleOptions.length === 0}
         />
       </div>
       <div>

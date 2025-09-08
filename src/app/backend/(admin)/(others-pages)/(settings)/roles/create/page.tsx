@@ -13,38 +13,50 @@ type Permission = {
   name: string;
 };
 
+// ✅ Cache global permissions biar gak fetch ulang terus
+let permissionsCache: Permission[] | null = null;
+
 export default function CreateRole() {
   const [name, setName] = useState("");
-  const [permissions, setPermissions] = useState<Permission[]>([]);
+  const [permissions, setPermissions] = useState<Permission[]>(permissionsCache || []);
   const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
   const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(!permissionsCache);
   const router = useRouter();
 
-  // Ambil list permissions dari API saat component mount
+  // Ambil list permissions (pakai cache kalau ada)
   useEffect(() => {
+    if (permissionsCache) return; // langsung pakai cache
+
+    let abortController = new AbortController();
+
     async function fetchPermissions() {
       try {
-        const res = await fetch("/api/backend/permissions");
+        const res = await fetch("/api/backend/permissions", { signal: abortController.signal });
         if (!res.ok) throw new Error("Gagal mengambil permissions");
-        const data = await res.json();
+        const data: Permission[] = await res.json();
+
+        permissionsCache = data; // ✅ simpan ke cache
         setPermissions(data);
       } catch (error) {
-        console.error(error);
-        alert("Gagal mengambil permissions");
+        if ((error as any).name !== "AbortError") {
+          console.error(error);
+          alert("Gagal mengambil permissions");
+        }
       } finally {
         setInitialLoading(false);
       }
     }
+
     fetchPermissions();
+
+    return () => abortController.abort();
   }, []);
 
-  // Handle toggle permission checkbox
+  // Toggle checkbox permission
   function togglePermission(id: number) {
-    setSelectedPermissions(prev =>
-      prev.includes(id)
-        ? prev.filter(pid => pid !== id)
-        : [...prev, id]
+    setSelectedPermissions((prev) =>
+      prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
     );
   }
 
@@ -104,23 +116,28 @@ export default function CreateRole() {
               onChange={(e) => setName(e.target.value)}
               placeholder="Input Nama Role"
               value={name}
+              disabled={loading}
             />
           </div>
 
           <div>
             <Label>Permissions</Label>
             <div className="grid grid-cols-2 gap-2 max-h-48 overflow-auto border rounded p-2">
-              {permissions.length === 0 && <p>Tidak ada permissions</p>}
-              {permissions.map((perm) => (
-                <label key={perm.id} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedPermissions.includes(perm.id)}
-                    onChange={() => togglePermission(perm.id)}
-                  />
-                  <span>{perm.name}</span>
-                </label>
-              ))}
+              {permissions.length === 0 ? (
+                <p className="text-gray-500">Tidak ada permissions</p>
+              ) : (
+                permissions.map((perm) => (
+                  <label key={perm.id} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedPermissions.includes(perm.id)}
+                      onChange={() => togglePermission(perm.id)}
+                      disabled={loading}
+                    />
+                    <span>{perm.name}</span>
+                  </label>
+                ))
+              )}
             </div>
           </div>
 

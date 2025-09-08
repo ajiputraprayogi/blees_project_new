@@ -57,7 +57,7 @@ export default function CreatePermission() {
     if (res.ok) {
       router.push("/backend/permissions");
     } else {
-      alert("Gagal menambahkan role");
+      alert("Gagal menambahkan permission");
     }
   }
 

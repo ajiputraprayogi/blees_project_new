@@ -4,106 +4,110 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
-import Label from '@/components/form/Label';
-import Input from '@/components/form/input/InputField';
+import Label from "@/components/form/Label";
+import Input from "@/components/form/input/InputField";
 import Button from "@/components/ui/button/Button";
+import SkeletonDefault from "@/components/skeleton/Default";
 
-
-export default function EditRole() {
-  useEffect(() => {
-      document.title = "Edit Permission | Admin Panel";
-  }, []);
-
+export default function EditPermission() {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams<{ id: string }>();
+
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
-    // const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+    document.title = "Edit Permission | Admin Panel";
 
-    const Loading = async () => {
-      // await delay(2000); // Simulasi loading awal 5 detik
-      setInitialLoading(false);
-    };
+    async function fetchPermission() {
+      try {
+        const res = await fetch(`/api/backend/permissions/${params.id}`);
+        if (!res.ok) throw new Error("Gagal memuat permission");
 
-    Loading();
-    
-    fetch(`/api/backend/permissions/${params.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setName(data.name);
-      })
-      .catch(() => alert("Gagal memuat permission"));
+        const data = await res.json();
+        setName(data.name || "");
+      } catch (error) {
+        console.error(error);
+        alert("Gagal memuat data permission");
+      } finally {
+        setInitialLoading(false);
+      }
+    }
+
+    fetchPermission();
   }, [params.id]);
-
-  if (initialLoading) {
-    return <>
-      <PageBreadcrumb pageTitle="Data Roles" />
-      <ComponentCard title="Form Edit Role">
-        <p>Loading...</p>
-      </ComponentCard>
-    </>
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
 
-    const res = await fetch(`/api/backend/permissions/${params.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name }),
-    });
+    try {
+      const res = await fetch(`/api/backend/permissions/${params.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      });
 
-    setLoading(false);
+      if (!res.ok) throw new Error("Gagal update permission");
 
-    if (res.ok) {
       router.push("/backend/permissions");
-    } else {
-      alert("Gagal update permission");
+    } catch (error) {
+      console.error(error);
+      alert("Terjadi kesalahan saat update permission");
+      setLoading(false);
     }
   }
 
-
-//   if (!permission) return <div>Loading...</div>;
+  if (initialLoading) {
+    return (
+      <>
+        <PageBreadcrumb pageTitle="Data Permissions" />
+        <ComponentCard title="Form Edit Permission">
+          <SkeletonDefault />
+        </ComponentCard>
+      </>
+    );
+  }
 
   return (
     <div>
-      <PageBreadcrumb pageTitle="Data Users" />
-      <ComponentCard title="Form Edit User">
+      <PageBreadcrumb pageTitle="Data Permissions" />
+      <ComponentCard title="Form Edit Permission">
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
-            <div>
-                <Label>Nama Permission</Label>
-                <Input 
-                    type="text" 
-                    id="name" 
-                    name="name" 
-                    value={name}
-                    required
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Input Nama Permission"/>
-                </div>
-                <div></div>
-                <div className="flex justify-end">
-                <Button
-                    size="sm"
-                    className="mr-2"
-                    variant="danger"
-                    type="button"
-                    onClick={(e) => {
-                    e.preventDefault();
-                    router.back();
-                    }}
-                >
-                    Kembali
-                </Button>
+          <div>
+            <Label>Nama Permission</Label>
+            <Input
+              type="text"
+              id="name"
+              name="name"
+              value={name}
+              required
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Input Nama Permission"
+              disabled={loading}
+            />
+          </div>
 
-                <Button size="sm" variant="green" type="submit" disabled={loading}>
-                    {loading ? "Menyimpan..." : "Simpan"}
-                </Button>
-            </div>
+          <div className="flex justify-end">
+            <Button
+              size="sm"
+              className="mr-2"
+              variant="danger"
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                router.back();
+              }}
+              disabled={loading}
+            >
+              Kembali
+            </Button>
+
+            <Button size="sm" variant="green" type="submit" disabled={loading}>
+              {loading ? "Menyimpan..." : "Simpan"}
+            </Button>
+          </div>
         </form>
       </ComponentCard>
     </div>
