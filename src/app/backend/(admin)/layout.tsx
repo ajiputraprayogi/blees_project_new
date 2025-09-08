@@ -1,6 +1,7 @@
 "use client";
 
 import { useSidebar } from "@/context/SidebarContext";
+import { PermissionsProvider } from "@/context/PermissionsContext"; // ✅ Tambahin provider
 import AppHeader from "@/layout/AppHeader";
 import AppSidebar from "@/layout/AppSidebar";
 import Backdrop from "@/layout/Backdrop";
@@ -13,6 +14,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { status } = useSession();
   const router = useRouter();
 
+  // Redirect kalau belum login
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
@@ -27,7 +29,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
-  // Kalau belum login, jangan render layout & konten sama sekali (return null)
   if (status === "unauthenticated") {
     return null;
   }
@@ -39,13 +40,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     : "lg:ml-[90px]";
 
   return (
-    <div className="min-h-screen xl:flex">
-      <AppSidebar />
-      <Backdrop />
-      <div className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}>
-        <AppHeader />
-        <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">{children}</div>
+    <PermissionsProvider>
+      <div className="min-h-screen xl:flex">
+        <AppSidebar />
+        <Backdrop />
+        <div
+          className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
+        >
+          <AppHeader />
+          <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+            {children}
+          </div>
+        </div>
       </div>
-    </div>
+    </PermissionsProvider>
   );
 }
