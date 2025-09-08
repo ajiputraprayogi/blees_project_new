@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import { hasPermission } from "@/utils/hasPermission";
-import { usePermissions } from "@/hooks/usePermissions";
+// import { usePermissions } from "@/hooks/usePermissions";
+import { usePermissions } from "@/context/PermissionsContext";
 import {
   Table,
   TableBody,
