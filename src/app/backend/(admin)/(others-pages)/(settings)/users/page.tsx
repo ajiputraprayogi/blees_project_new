@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useState, useMemo } from "react";
 import { hasPermission } from "@/utils/hasPermission";
 import { usePermissions } from "@/hooks/usePermissions";
 
@@ -20,7 +19,6 @@ import ComponentCard from "@/components/common/ComponentCard";
 import AddUserButton from "./AddUserButton";
 import SkeletonTable from "@/components/skeleton/Table";
 
-
 type Role = {
   id: number;
   name: string;
@@ -34,10 +32,16 @@ type User = {
 };
 
 export default function UsersPage() {
+  const router = useRouter();
   const { permissions: userPermissions, loading: permissionsLoading } = usePermissions();
+
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
+
+  // ✅ Precompute permissions sekali
+  const canAdd = useMemo(() => hasPermission(userPermissions, "add-users"), [userPermissions]);
+  const canEdit = useMemo(() => hasPermission(userPermissions, "edit-users"), [userPermissions]);
+  const canDelete = useMemo(() => hasPermission(userPermissions, "delete-users"), [userPermissions]);
 
   useEffect(() => {
     document.title = "Data Users | Admin Panel";
@@ -47,16 +51,12 @@ export default function UsersPage() {
   async function fetchUsers() {
     setLoading(true);
     try {
-      const res = await fetch("/api/backend/users");
+      const res = await fetch("/api/backend/users", { cache: "no-store" });
       if (!res.ok) throw new Error("Gagal memuat data users");
       const data: User[] = await res.json();
       setUsers(data);
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        Swal.fire("Error", error.message, "error");
-      } else {
-        Swal.fire("Error", "Terjadi kesalahan", "error");
-      }
+      Swal.fire("Error", error instanceof Error ? error.message : "Terjadi kesalahan", "error");
     } finally {
       setLoading(false);
     }
@@ -85,37 +85,38 @@ export default function UsersPage() {
       });
       if (!res.ok) throw new Error("Gagal menghapus user");
 
-      Swal.fire("Terhapus!", "User berhasil dihapus.", "success");
-      fetchUsers();
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        Swal.fire("Error", error.message, "error");
-      } else {
-        Swal.fire("Error", "Terjadi kesalahan", "error");
-      }
-    }
+      // ✅ Optimistic update
+      setUsers((prev) => prev.filter((u) => u.id !== id));
 
+      Swal.fire("Terhapus!", "User berhasil dihapus.", "success");
+
+      // optional → bisa sync ulang dari DB
+      // await fetchUsers();
+    } catch (error: unknown) {
+      Swal.fire("Error", error instanceof Error ? error.message : "Terjadi kesalahan", "error");
+    }
   }
 
-  if (loading || permissionsLoading)
+  if (loading || permissionsLoading) {
     return (
       <>
         <PageBreadcrumb pageTitle="Data Users" />
         <ComponentCard
           title="Data Users Table"
-          headerRight={hasPermission(userPermissions, "add-users") && <AddUserButton />}
+          headerRight={canAdd && <AddUserButton />}
         >
           <SkeletonTable />
         </ComponentCard>
       </>
     );
+  }
 
   return (
     <div>
       <PageBreadcrumb pageTitle="Data Users" />
       <ComponentCard
         title="Data Users Table"
-        headerRight={hasPermission(userPermissions, "add-users") && <AddUserButton />}
+        headerRight={canAdd && <AddUserButton />}
       >
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
           <div className="max-w-full overflow-x-auto">
@@ -123,10 +124,18 @@ export default function UsersPage() {
               <Table>
                 <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                   <TableRow>
-                    <TableCell className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Nama</TableCell>
-                    <TableCell className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Email</TableCell>
-                    <TableCell className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Role</TableCell>
-                    <TableCell className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">Actions</TableCell>
+                    <TableCell className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                      Nama
+                    </TableCell>
+                    <TableCell className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                      Email
+                    </TableCell>
+                    <TableCell className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                      Role
+                    </TableCell>
+                    <TableCell className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
+                      Actions
+                    </TableCell>
                   </TableRow>
                 </TableHeader>
 
@@ -134,24 +143,43 @@ export default function UsersPage() {
                   {users.map((user) => (
                     <TableRow key={user.id}>
                       <TableCell className="px-5 py-4 sm:px-6 text-start">
-                        <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">{user.nama}</span>
+                        <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                          {user.nama}
+                        </span>
                       </TableCell>
                       <TableCell className="px-5 py-4 sm:px-6 text-start">
-                        <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">{user.email}</span>
+                        <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                          {user.email}
+                        </span>
                       </TableCell>
                       <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                         {user.role?.name ?? "-"}
                       </TableCell>
                       <TableCell className="px-4 py-3 text-gray-500 text-center text-theme-sm dark:text-gray-400">
-                        {hasPermission(userPermissions, "edit-users") && (
-                          <Button size="xs" variant="warning" type="button" onClick={() => handleEdit(user.id)}>Edit</Button>
+                        {canEdit && (
+                          <Button
+                            size="xs"
+                            variant="warning"
+                            type="button"
+                            onClick={() => handleEdit(user.id)}
+                          >
+                            Edit
+                          </Button>
                         )}
 
-                        {hasPermission(userPermissions, "delete-users") && (
-                          <Button size="xs" variant="danger" type="button" className="ml-2" onClick={() => handleDelete(user.id)}>Delete</Button>
+                        {canDelete && (
+                          <Button
+                            size="xs"
+                            variant="danger"
+                            type="button"
+                            className="ml-2"
+                            onClick={() => handleDelete(user.id)}
+                          >
+                            Delete
+                          </Button>
                         )}
 
-                        {!hasPermission(userPermissions, "edit-users") && !hasPermission(userPermissions, "delete-users") && (
+                        {!canEdit && !canDelete && (
                           <span className="text-gray-400">No Actions</span>
                         )}
                       </TableCell>
