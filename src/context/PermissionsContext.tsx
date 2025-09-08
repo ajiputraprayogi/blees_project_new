@@ -8,12 +8,13 @@ type PermissionsContextType = {
   roles: string[];
   loading: boolean;
   refresh: () => Promise<void>;
+  updateLocal: (newPermissions: string[], newRoles: string[]) => void;
 };
 
 const PermissionsContext = createContext<PermissionsContextType | undefined>(undefined);
 
 export function PermissionsProvider({ children }: { children: React.ReactNode }) {
-  const { status } = useSession(); // 🔹 Cek status login
+  const { status } = useSession(); // 🔹 cek status login
   const [permissions, setPermissions] = useState<string[]>([]);
   const [roles, setRoles] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +29,7 @@ export function PermissionsProvider({ children }: { children: React.ReactNode })
     }
   }, [status]);
 
-  // 🔹 Ambil dari cache saat pertama kali mount
+  // 🔹 Ambil dari cache saat mount pertama
   useEffect(() => {
     const cached = sessionStorage.getItem("userPermissions");
     if (cached) {
@@ -41,14 +42,15 @@ export function PermissionsProvider({ children }: { children: React.ReactNode })
         console.warn("Failed to parse userPermissions from sessionStorage");
       }
     }
+
     if (status === "authenticated") {
       fetchPermissions();
-      const interval = setInterval(fetchPermissions, 60_000);
+      const interval = setInterval(fetchPermissions, 60_000); // auto refresh setiap 1 menit
       return () => clearInterval(interval);
     }
   }, [status]);
 
-  // 🔹 Fetch API
+  // 🔹 Fetch API dari backend
   async function fetchPermissions() {
     try {
       const res = await fetch("/api/backend/me/permissions", {
@@ -78,15 +80,34 @@ export function PermissionsProvider({ children }: { children: React.ReactNode })
     }
   }
 
+  // 🔹 Update lokal tanpa fetch, untuk UI langsung responsive
+  function updateLocal(newPermissions: string[], newRoles: string[]) {
+    setPermissions(newPermissions);
+    setRoles(newRoles);
+    sessionStorage.setItem(
+      "userPermissions",
+      JSON.stringify({ permissions: newPermissions, roles: newRoles })
+    );
+  }
+
   return (
-    <PermissionsContext.Provider value={{ permissions, roles, loading, refresh: fetchPermissions }}>
+    <PermissionsContext.Provider
+      value={{
+        permissions,
+        roles,
+        loading,
+        refresh: fetchPermissions,
+        updateLocal,
+      }}
+    >
       {children}
     </PermissionsContext.Provider>
   );
 }
 
+// 🔹 Hook untuk pakai permissions di komponen
 export function usePermissions() {
   const ctx = useContext(PermissionsContext);
-  if (!ctx) throw new Error("usePermissionsContext must be used within PermissionsProvider");
+  if (!ctx) throw new Error("usePermissions must be used within PermissionsProvider");
   return ctx;
 }
