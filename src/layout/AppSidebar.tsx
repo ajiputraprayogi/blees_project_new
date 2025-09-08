@@ -239,7 +239,8 @@ import {
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
 
-import { usePermissions } from "@/hooks/usePermissions";
+// import { usePermissions } from "@/hooks/usePermissions";
+import { usePermissions } from "@/context/PermissionsContext";
 import { hasPermission } from "@/utils/hasPermission";
 
 type SubItem = {

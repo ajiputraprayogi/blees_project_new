@@ -8,8 +8,10 @@ import Backdrop from "@/layout/Backdrop";
 import React, { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Analytics } from "@vercel/analytics/next";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  <Analytics />
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
   const { status } = useSession();
   const router = useRouter();
@@ -36,8 +38,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const mainContentMargin = isMobileOpen
     ? "ml-0"
     : isExpanded || isHovered
-    ? "lg:ml-[290px]"
-    : "lg:ml-[90px]";
+      ? "lg:ml-[290px]"
+      : "lg:ml-[90px]";
 
   return (
     <PermissionsProvider>
