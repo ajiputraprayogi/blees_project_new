@@ -4,10 +4,17 @@ import { prisma } from "@/lib/db";
 export async function GET() {
   try {
     const roles = await prisma.roles.findMany({
-      include: {
+      select: {
+        id: true,
+        name: true,
         role_has_permissions: {
-          include: {
-            permissions: true,
+          select: {
+            permissions: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
       },
