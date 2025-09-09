@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import { hasPermission } from "@/utils/hasPermission";
-// import { usePermissions } from "@/hooks/usePermissions";
 import { usePermissions } from "@/context/PermissionsContext";
+import withPermission from "@/components/auth/withPermission";
 import {
   Table,
   TableBody,
@@ -24,17 +24,27 @@ type Role = {
   name: string;
 };
 
-export default function RolesPage() {
+function RolesPage() {
   const router = useRouter();
-  const { permissions: userPermissions, loading: permissionsLoading } = usePermissions();
+  const { permissions: userPermissions, loading: permissionsLoading } =
+    usePermissions();
 
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
 
   // ✅ Precompute sekali, biar nggak cek permission berulang
-  const canAdd = useMemo(() => hasPermission(userPermissions, "add-roles"), [userPermissions]);
-  const canEdit = useMemo(() => hasPermission(userPermissions, "edit-roles"), [userPermissions]);
-  const canDelete = useMemo(() => hasPermission(userPermissions, "delete-roles"), [userPermissions]);
+  const canAdd = useMemo(
+    () => hasPermission(userPermissions, "add-roles"),
+    [userPermissions]
+  );
+  const canEdit = useMemo(
+    () => hasPermission(userPermissions, "edit-roles"),
+    [userPermissions]
+  );
+  const canDelete = useMemo(
+    () => hasPermission(userPermissions, "delete-roles"),
+    [userPermissions]
+  );
 
   useEffect(() => {
     document.title = "Data Roles | Admin Panel";
@@ -49,7 +59,11 @@ export default function RolesPage() {
       const data = await res.json();
       setRoles(data);
     } catch (err: unknown) {
-      Swal.fire("Error", err instanceof Error ? err.message : "Terjadi kesalahan", "error");
+      Swal.fire(
+        "Error",
+        err instanceof Error ? err.message : "Terjadi kesalahan",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -84,7 +98,11 @@ export default function RolesPage() {
       // optional → bisa dipakai kalau mau sync ulang dari DB
       // await fetchRoles();
     } catch (err: unknown) {
-      Swal.fire("Error", err instanceof Error ? err.message : "Terjadi kesalahan", "error");
+      Swal.fire(
+        "Error",
+        err instanceof Error ? err.message : "Terjadi kesalahan",
+        "error"
+      );
     }
   }
 
@@ -167,3 +185,6 @@ export default function RolesPage() {
     </div>
   );
 }
+
+// ✅ hanya user dengan "view-roles" yg bisa akses halaman ini
+export default withPermission(RolesPage, "view-roles");

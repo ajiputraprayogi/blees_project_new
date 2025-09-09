@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import withPermission from "@/components/auth/withPermission";
 import { useParams, useRouter } from "next/navigation";
 import EditUserForm from "./EditUserForm";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -13,7 +14,7 @@ interface User {
   roleId: number | null;
 }
 
-export default function EditUserPage() {
+function EditUserPage() {
   const params = useParams();
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
@@ -88,3 +89,5 @@ export default function EditUserPage() {
     </div>
   );
 }
+
+export default withPermission(EditUserPage, "edit-users");

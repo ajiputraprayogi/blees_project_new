@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import withPermission from "@/components/auth/withPermission";
 import { useRouter } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
@@ -11,7 +12,7 @@ import SkeletonDefault from "@/components/skeleton/Default";
 
 
 
-export default function CreatePermission() {
+function CreatePermission() {
   useEffect(() => {
       document.title = "Tambah Permission | Admin Panel";
   }, []);
@@ -102,3 +103,5 @@ export default function CreatePermission() {
     </div>
   );
 }
+
+export default withPermission(CreatePermission, "add-permissions");

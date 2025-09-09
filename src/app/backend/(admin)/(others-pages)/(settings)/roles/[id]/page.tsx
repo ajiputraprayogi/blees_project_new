@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import withPermission from "@/components/auth/withPermission";
 import { useRouter, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -28,7 +29,7 @@ type RoleWithPermissions = {
 // ✅ Cache global biar permissions tidak di-fetch berulang
 let permissionsCache: Permission[] | null = null;
 
-export default function EditRole() {
+function EditRole() {
   const router = useRouter();
   const params = useParams();
   const { data: session } = useSession();
@@ -195,3 +196,5 @@ export default function EditRole() {
     </div>
   );
 }
+
+export default withPermission(EditRole, "edit-roles");
