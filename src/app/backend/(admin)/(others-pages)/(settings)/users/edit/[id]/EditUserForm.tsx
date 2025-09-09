@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
 import Select from "@/components/form/Select";
@@ -25,7 +26,8 @@ let rolesCache: RoleOption[] | null = null;
 
 export default function EditUserForm({ user }: { user: User }) {
   const router = useRouter();
-  const { refresh } = usePermissions(); // 🔹 ambil fungsi refresh
+  const { data: session } = useSession();
+  const { refresh, updateLocal } = usePermissions(); // 🔹 ambil fungsi context
 
   const [nama, setNama] = useState(user.nama);
   const [email, setEmail] = useState(user.email);
@@ -113,8 +115,14 @@ export default function EditUserForm({ user }: { user: User }) {
 
       if (!res.ok) throw new Error("Failed to update user");
 
-      // 🔹 refresh permissions/roles di context
-      await refresh();
+      // ✅ cek apakah user yang diedit adalah user yang sedang login
+      if (String(session?.user?.id) === String(user.id)) {
+        const updated = await res.json();
+        // update permission secara lokal biar instan
+        updateLocal(updated.user.permissions || [], updated.user.roles || []);
+        // sync ulang ke backend (tidak ditunggu)
+        refresh();
+      }
 
       router.push("/backend/users");
     } catch (error) {
