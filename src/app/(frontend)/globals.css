@@ -1,0 +1,35 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap'); */
+@import "tailwindcss";
+@plugin "daisyui";
+
+body {
+  /* font-family: 'Outfit'; */
+}
+
+/* styles.css */
+.text-glow {
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.6),
+               0 0 10px rgba(255, 255, 255, 0.4),
+               0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.text-glow-gold {
+  text-shadow: 
+    0 0 5px rgba(255, 215, 0, 0.8),   /* glow tipis */
+    0 0 10px rgba(255, 215, 0, 0.6),  /* glow medium */
+    0 0 20px rgba(255, 215, 0, 0.4);  /* glow lembut */
+  color: #ffe75f; /* teks emas */
+}
+
+input {
+  outline: none;
+}
+
+/* Hilangkan scrollbar (semua browser) */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE dan Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
