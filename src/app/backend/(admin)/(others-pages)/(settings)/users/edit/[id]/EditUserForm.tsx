@@ -26,7 +26,7 @@ let rolesCache: RoleOption[] | null = null;
 
 export default function EditUserForm({ user }: { user: User }) {
   const router = useRouter();
-  const { refresh, updateLocal } = usePermissions();
+  const { refresh } = usePermissions();
   const { data: session } = useSession();
 
   const [nama, setNama] = useState(user.nama);
@@ -117,17 +117,8 @@ export default function EditUserForm({ user }: { user: User }) {
 
       if (!res.ok) throw new Error("Failed to update user");
 
-      const updated = await res.json();
-      const updatedUser = updated.user ?? updated; // fleksibel
-
-      // ✅ kalau user yg diedit adalah user yg sedang login
-      if (Number(session?.user?.id) === user.id) {
-        const perms = updatedUser.permissions ?? [];
-        const roles = updatedUser.roles ?? [];
-        updateLocal(perms, roles);
-      }
-
-      await refresh(); // sync global
+      // 🔹 sinkronisasi global (tanpa updateLocal)
+      await refresh();
 
       router.push("/backend/users");
     } catch (error) {
@@ -170,7 +161,8 @@ export default function EditUserForm({ user }: { user: User }) {
             const num = Number(val);
             if (!isNaN(num)) setSelectedRole(num);
           }}
-          placeholder={roleOptions.length ? "Pilih Role" : "Memuat..."}
+          placeholder={roleOptions.length ? "Pilih Role" : "Memuat..."
+          }
           className="dark:bg-dark-900"
           defaultValue=""
           disabled={loading || roleOptions.length === 0}
