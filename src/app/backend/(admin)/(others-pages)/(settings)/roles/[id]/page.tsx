@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
 import Label from "@/components/form/Label";
@@ -30,7 +31,8 @@ let permissionsCache: Permission[] | null = null;
 export default function EditRole() {
   const router = useRouter();
   const params = useParams();
-  const { refresh } = usePermissions(); // 🔹 ambil fungsi refresh dari context
+  const { data: session } = useSession();
+  const { refresh, updateLocal, roles } = usePermissions();
 
   const [name, setName] = useState("");
   const [permissions, setPermissions] = useState<Permission[]>(permissionsCache || []);
@@ -106,8 +108,17 @@ export default function EditRole() {
 
       if (!res.ok) throw new Error("Gagal update role");
 
-      // 🔹 refresh permissions di context agar data terbaru langsung berlaku
-      await refresh();
+      // ✅ cek apakah role yang di-edit sama dengan role user login sekarang
+      const userRoles = roles || [];
+      const editedRoleId = Number(params.id);
+
+      if (session?.user && userRoles.includes(String(editedRoleId))) {
+        // kalau backend return data role yang diupdate, bisa pakai ini
+        const updated = await res.json();
+        updateLocal(updated.user.permissions || [], updated.user.roles || []);
+        // sync background
+        refresh();
+      }
 
       router.push("/backend/roles");
     } catch (error) {
