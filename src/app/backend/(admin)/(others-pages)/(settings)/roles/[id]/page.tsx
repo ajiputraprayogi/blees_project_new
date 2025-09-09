@@ -108,17 +108,8 @@ export default function EditRole() {
 
       if (!res.ok) throw new Error("Gagal update role");
 
-      // ✅ cek apakah role yang di-edit sama dengan role user login sekarang
-      const userRoles = roles || [];
-      const editedRoleId = Number(params.id);
-
-      if (session?.user && userRoles.includes(String(editedRoleId))) {
-        // kalau backend return data role yang diupdate, bisa pakai ini
-        const updated = await res.json();
-        updateLocal(updated.user.permissions || [], updated.user.roles || []);
-        // sync background
-        refresh();
-      }
+      // ✅ langsung refresh permission user login
+      await refresh();
 
       router.push("/backend/roles");
     } catch (error) {
@@ -127,6 +118,7 @@ export default function EditRole() {
       setLoading(false);
     }
   }
+
 
   if (initialLoading) {
     return (

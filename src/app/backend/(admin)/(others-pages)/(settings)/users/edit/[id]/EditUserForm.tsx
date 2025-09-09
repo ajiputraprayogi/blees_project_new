@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
 import Select from "@/components/form/Select";
 import Button from "@/components/ui/button/Button";
-import { usePermissions } from "@/context/PermissionsContext"; // 🔹 import hook
+import { usePermissions } from "@/context/PermissionsContext";
+import { useSession } from "next-auth/react";
 
 type RoleOption = {
   value: number;
@@ -26,8 +26,8 @@ let rolesCache: RoleOption[] | null = null;
 
 export default function EditUserForm({ user }: { user: User }) {
   const router = useRouter();
+  const { refresh, updateLocal } = usePermissions();
   const { data: session } = useSession();
-  const { refresh, updateLocal } = usePermissions(); // 🔹 ambil fungsi context
 
   const [nama, setNama] = useState(user.nama);
   const [email, setEmail] = useState(user.email);
@@ -53,10 +53,12 @@ export default function EditUserForm({ user }: { user: User }) {
         if (!res.ok) throw new Error("Failed to fetch roles");
 
         const data = await res.json();
-        const options: RoleOption[] = data.map((role: { id: number; name: string }) => ({
-          value: role.id,
-          label: role.name,
-        }));
+        const options: RoleOption[] = data.map(
+          (role: { id: number; name: string }) => ({
+            value: role.id,
+            label: role.name,
+          })
+        );
 
         rolesCache = options;
         setRoleOptions(options);
@@ -115,14 +117,17 @@ export default function EditUserForm({ user }: { user: User }) {
 
       if (!res.ok) throw new Error("Failed to update user");
 
-      // ✅ cek apakah user yang diedit adalah user yang sedang login
-      if (String(session?.user?.id) === String(user.id)) {
-        const updated = await res.json();
-        // update permission secara lokal biar instan
-        updateLocal(updated.user.permissions || [], updated.user.roles || []);
-        // sync ulang ke backend (tidak ditunggu)
-        refresh();
+      const updated = await res.json();
+      const updatedUser = updated.user ?? updated; // fleksibel
+
+      // ✅ kalau user yg diedit adalah user yg sedang login
+      if (Number(session?.user?.id) === user.id) {
+        const perms = updatedUser.permissions ?? [];
+        const roles = updatedUser.roles ?? [];
+        updateLocal(perms, roles);
       }
+
+      await refresh(); // sync global
 
       router.push("/backend/users");
     } catch (error) {
