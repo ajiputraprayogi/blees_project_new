@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import withPermission from "@/components/auth/withPermission";
 import { useRouter, useParams } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
@@ -9,7 +10,7 @@ import Input from "@/components/form/input/InputField";
 import Button from "@/components/ui/button/Button";
 import SkeletonDefault from "@/components/skeleton/Default";
 
-export default function EditPermission() {
+function EditPermission() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
 
@@ -113,3 +114,5 @@ export default function EditPermission() {
     </div>
   );
 }
+
+export default withPermission(EditPermission, "edit-permissions");

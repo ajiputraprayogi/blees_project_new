@@ -4,6 +4,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { hasPermission } from "@/utils/hasPermission";
 // import { usePermissions } from "@/hooks/usePermissions";
 import { usePermissions } from "@/context/PermissionsContext";
+import withPermission from "@/components/auth/withPermission";
 import {
   Table,
   TableBody,
@@ -13,15 +14,13 @@ import {
 } from "@/components/ui/table";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import Button from "@/components/ui/button/Button";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
-import AddPermissionsButton from "./AddPermissionsButton";
 import SkeletonTable from "@/components/skeleton/Table";
 
 type Permission = { id: number; name: string };
 
-export default function PermissionsPage() {
+function PermissionsPage() {
   const router = useRouter();
   const { permissions: userPermissions, loading: permissionsLoading } = usePermissions();
   const [allPermissions, setAllPermissions] = useState<Permission[]>([]);
@@ -149,3 +148,5 @@ export default function PermissionsPage() {
     </div>
   );
 }
+
+export default withPermission(PermissionsPage, "view-permissions");

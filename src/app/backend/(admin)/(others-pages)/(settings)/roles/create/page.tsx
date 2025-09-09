@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import withPermission from "@/components/auth/withPermission";
 import { useRouter } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
@@ -16,7 +17,7 @@ type Permission = {
 // ✅ Cache global permissions biar gak fetch ulang terus
 let permissionsCache: Permission[] | null = null;
 
-export default function CreateRole() {
+function CreateRole() {
   const [name, setName] = useState("");
   const [permissions, setPermissions] = useState<Permission[]>(permissionsCache || []);
   const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
@@ -165,3 +166,5 @@ export default function CreateRole() {
     </div>
   );
 }
+
+export default withPermission(CreateRole, "add-roles");

@@ -4,6 +4,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { hasPermission } from "@/utils/hasPermission";
 // import { usePermissions } from "@/hooks/usePermissions";
 import { usePermissions } from "@/context/PermissionsContext";
+import withPermission from "@/components/auth/withPermission";
 
 import {
   Table,
@@ -32,7 +33,7 @@ type User = {
   role: Role | null;
 };
 
-export default function UsersPage() {
+function UsersPage() {
   const router = useRouter();
   const { permissions: userPermissions, loading: permissionsLoading } = usePermissions();
 
@@ -195,3 +196,5 @@ export default function UsersPage() {
     </div>
   );
 }
+
+export default withPermission(UsersPage, "view-users");

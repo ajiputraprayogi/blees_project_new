@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useEffect }  from "react";
+import withPermission from "@/components/auth/withPermission";
 import CreateUserForm from "./CreateUserForm";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
 
-export default function CreateUserPage() {
+function CreateUserPage() {
     useEffect(() => {
         document.title = "Tambah Users | Admin Panel";
     }, []);
@@ -20,3 +21,5 @@ export default function CreateUserPage() {
         </div>
     );
 }
+
+export default withPermission(CreateUserPage, "view-users");

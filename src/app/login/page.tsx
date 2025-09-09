@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // state untuk error
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMessage(null); // reset error sebelumnya
+    setErrorMessage(null);
 
     try {
       const res = await signIn("credentials", {
@@ -27,19 +27,17 @@ export default function LoginPage() {
         redirect: false,
       });
 
-      console.log("SignIn response:", res); // debug response
-
       if (res?.ok) {
+        // 🚀 sukses login → biarkan tombol tetap loading sampai pindah halaman
         router.push("/backend");
       } else {
-        // tampilkan error spesifik dari next-auth
+        // ❌ gagal login → reset loading
         setErrorMessage(res?.error || "Login gagal: email atau password salah");
-        console.error("Login error:", res?.error);
+        setLoading(false);
       }
     } catch (err: any) {
       setErrorMessage("Terjadi error saat login. Cek console untuk detail.");
       console.error("Unexpected login error:", err);
-    } finally {
       setLoading(false);
     }
   };
@@ -91,7 +89,10 @@ export default function LoginPage() {
           </div>
         )}
 
-        <label htmlFor="email" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600, color: "#555" }}>
+        <label
+          htmlFor="email"
+          style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600, color: "#555" }}
+        >
           Email
         </label>
         <input
@@ -113,7 +114,10 @@ export default function LoginPage() {
           disabled={loading}
         />
 
-        <label htmlFor="password" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600, color: "#555" }}>
+        <label
+          htmlFor="password"
+          style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600, color: "#555" }}
+        >
           Password
         </label>
         <input
