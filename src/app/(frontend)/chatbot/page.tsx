@@ -51,7 +51,7 @@ export default function ContractorChatbot() {
       type: "bot",
       text: found
         ? found.response
-        : "Maaf, saya belum bisa menjawab pertanyaan itu. Bisa perjelas?",
+        : "Maaf, kami belum bisa menjawab pertanyaan itu. Bisa perjelas?",
     };
 
     setTimeout(() => {

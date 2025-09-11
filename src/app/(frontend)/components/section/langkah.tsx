@@ -134,7 +134,7 @@ export default function StepPage() {
           className="text-center pt-6 border-t border-yellow-700"
         >
           <p className="text-sm text-yellow-400 flex items-center justify-center gap-2">
-            <FaCheckCircle /> Semua prosedur ini mengikuti standar profesional jasa
+            <span className="hidden md:block"><FaCheckCircle /></span> Semua prosedur ini mengikuti standar profesional jasa
             arsitek desain rumah.
           </p>
         </div>
