@@ -17,7 +17,7 @@ export default function OrderForm() {
     alamat: "",
   });
 
-  const nomorAdmin = "6282237666321"; // ganti dengan nomor WA tujuan
+  const nomorAdmin = "6281234127399"; // ganti dengan nomor WA tujuan
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -50,7 +50,7 @@ export default function OrderForm() {
   return (
     <section className="min-h-screen w-full text-white px-3 py-8">
       <div className="w-full mx-auto grid gap-6 md:grid-cols-2">
-        <div className="md:col-span-2 bg-zinc-800 rounded-2xl shadow-xl p-8 border border-zinc-700">
+        <div className="md:col-span-2 bg-transparent rounded-2xl shadow-xl p-3 md:p-8">
           <h1 className="text-3xl font-bold mb-8 text-center text-amber-400">
             Form Order Bless Architect
           </h1>
@@ -83,7 +83,7 @@ export default function OrderForm() {
             {/* Custom Select */}
             {[
               {
-                label: "Jenis Desain Bangunan *",
+                label: "Jenis Desain Bangunan",
                 name: "jenisDesain",
                 options: ["Rumah", "Villa", "Ruko", "Apartemen", "Kos", "Hotel"],
                 required: true,
@@ -99,7 +99,7 @@ export default function OrderForm() {
                 options: ["Paket Arsitek", "Paket Interior", "Paket Arsitek + Interior"],
               },
               {
-                label: "Rencana Budget Pembangunan *",
+                label: "Rencana Budget Pembangunan",
                 name: "budget",
                 options: ["< 500 Juta", "500 Juta - 1 M", "1 M - 3 M", "3 M - 5 M", "> 5 M"],
                 required: true,
@@ -118,7 +118,7 @@ export default function OrderForm() {
                                focus:outline-none cursor-pointer hover:bg-zinc-800 
                                transition-colors"
                   >
-                    <option value="">-- Pilih {field.label} --</option>
+                    <option value="">Pilih {field.label}</option>
                     {field.options.map((opt, idx) => (
                       <option key={idx} value={opt}>
                         {opt}

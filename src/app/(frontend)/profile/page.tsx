@@ -6,27 +6,27 @@ import Image from "next/image";
 export default function ProfilePage() {
   const team = [
     {
-      name: "Andi Pratama",
+      name: "Ferry Irwandi",
       role: "Founder & CEO",
-      img: "/images/user/pbw.jpg",
+      img: "/images/user/ferry.jpg",
       span: "col-span-2 row-span-2", // lebih besar
     },
     {
       name: "Budi Santoso",
       role: "Lead Architect",
-      img: "/images/user/pbw.jpg",
+      img: "/images/user/ferry.jpg",
       span: "",
     },
     {
       name: "Citra Lestari",
       role: "Interior Designer",
-      img: "/images/user/pbw.jpg",
+      img: "/images/user/ferry.jpg",
       span: "",
     },
     {
       name: "Dewi Kurnia",
       role: "Project Manager",
-      img: "/images/user/pbw.jpg",
+      img: "/images/user/ferry.jpg",
       span: "col-span-2", // lebar
     },
   ];

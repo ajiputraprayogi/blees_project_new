@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-import type { Variants } from "framer-motion";
 import {
   FiHome,
   FiMaximize,
@@ -38,36 +36,21 @@ type Feature = {
   badge?: string;
 };
 
-const container: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { staggerChildren: 0.045, delayChildren: 0.1 },
-  },
-};
-
-const item: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  show: { opacity: 1, y: 0 },
-};
-
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <motion.div
-      variants={item}
-      whileHover={{ y: -4, scale: 1.01 }}
-      transition={{ type: "spring", stiffness: 260, damping: 22 }}
-      className="group relative rounded-2xl bg-gradient-to-br from-neutral-950 to-neutral-950 p-5 shadow-md backdrop-blur"
+    <div
+      data-aos="fade-up"
+      data-aos-duration="800"
+      className="group relative rounded-2xl bg-gradient-to-br from-neutral-950 to-neutral-950 p-5 shadow-md backdrop-blur hover:-translate-y-1 hover:scale-[1.01] transition"
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
 function FeatureRow({ label, Icon, badge }: Feature) {
   return (
-    <div className="flex md:flex-col items-center gap-3" data-aos="zoom-out-up">
+    <div className="flex md:flex-col items-center gap-3">
       <span className="inline-flex size-9 items-center justify-center rounded-xl border border-yellow-500/40 bg-neutral-900 text-yellow-400 shadow-sm group-hover:shadow-md">
         <Icon className="size-5" />
       </span>
@@ -127,10 +110,9 @@ export default function MottoPage() {
     <main className="mx-auto max-w-7xl px-4 py-20 bg-black">
       {/* Hero */}
       <section className="mb-14">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 140, damping: 18 }}
+        <div
+          data-aos="fade-up"
+          data-aos-duration="800"
           className="flex flex-col items-start gap-6 rounded-3xl border border-yellow-500/30 bg-gradient-to-br from-neutral-950 to-neutral-900 p-8 shadow-lg"
         >
           <div>
@@ -138,27 +120,28 @@ export default function MottoPage() {
               Paket Desain Rumah — Modern, Responsif, Minimalis
             </h1>
             <p className="mt-2 max-w-3xl text-sm md:text-base text-neutral-400">
-              Fokus pada kualitas, kenyamanan, dan estetika jangka panjang. Semua
-              poin di bawah ini sudah termasuk dalam layanan kami.
+              Fokus pada kualitas, kenyamanan, dan estetika jangka panjang.
+              Semua poin di bawah ini sudah termasuk dalam layanan kami.
             </p>
           </div>
           <div className="grid w-full grid-cols-2 gap-3 lg:grid-cols-4">
-  {[
-    { Icon: FaCrown, label: "Elit" },
-    { Icon: FiShield, label: "Aman" },
-    { Icon: FiSun, label: "Alami" },
-    { Icon: FiStar, label: "Tahan Lama" },
-  ].map(({ Icon, label }) => (
-    <div
-      key={label}
-      className="flex items-center justify-center gap-2 rounded-2xl border border-yellow-500/30 bg-neutral-950 px-4 py-3 text-sm shadow-md"
-    >
-      <Icon className="size-5 text-yellow-400" />
-      <span className="font-medium text-neutral-200">{label}</span>
-    </div>
-  ))}
-</div>
-        </motion.div>
+            {[
+              { Icon: FaCrown, label: "Elit" },
+              { Icon: FiShield, label: "Aman" },
+              { Icon: FiSun, label: "Alami" },
+              { Icon: FiStar, label: "Tahan Lama" },
+            ].map(({ Icon, label }) => (
+              <div
+                key={label}
+                data-aos="zoom-in"
+                className="flex items-center justify-center gap-2 rounded-2xl border border-yellow-500/30 bg-neutral-950 px-4 py-3 text-sm shadow-md"
+              >
+                <Icon className="size-5 text-yellow-400" />
+                <span className="font-medium text-neutral-200">{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Core Features */}
@@ -168,18 +151,13 @@ export default function MottoPage() {
             Keunggulan Utama
           </h2>
         </div>
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
-        >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {coreFeatures.map((f) => (
             <Card key={f.label}>
               <FeatureRow {...f} />
             </Card>
           ))}
-        </motion.div>
+        </div>
       </section>
 
       {/* Deliverables */}
@@ -189,18 +167,13 @@ export default function MottoPage() {
             Dokumen & Output yang Anda Dapatkan
           </h2>
         </div>
-        <motion.div
-          // variants={container}
-          // initial="hidden"
-          // animate="show"
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
-        >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {deliverables.map((d) => (
             <Card key={d.label}>
               <FeatureRow {...d} />
             </Card>
           ))}
-        </motion.div>
+        </div>
       </section>
 
       {/* Optional */}
@@ -210,18 +183,13 @@ export default function MottoPage() {
             Biaya Tambahan (Opsional)
           </h2>
         </div>
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
-        >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {optionalExtras.map((o) => (
             <Card key={o.label}>
               <FeatureRow {...o} />
             </Card>
           ))}
-        </motion.div>
+        </div>
       </section>
     </main>
   );
