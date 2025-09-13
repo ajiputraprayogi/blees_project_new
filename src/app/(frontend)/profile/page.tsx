@@ -37,7 +37,7 @@ export default function ProfilePage() {
       {/* Logo Meaning */}
       <LogoMeaningPage />
       {/* Sejarah Perusahaan */}
-      <section className="max-w-4xl mx-auto text-center space-y-6 mb-10">
+      <section className="max-w-4xl mx-auto text-center space-y-6 mb-10" data-aos="fade-up">
         <h2 className="text-4xl md:text-5xl font-bold text-left md:text-center text-yellow-400 px-5 md:px-0">
           Sejarah Perusahaan
         </h2>
