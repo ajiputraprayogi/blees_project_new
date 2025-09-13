@@ -9,7 +9,7 @@ export default function ContactPage() {
   const socials = [
         {
       name: "Whatsapp",
-      href: "https://wa.me/6285176795609",
+      href: "https://wa.me/6281234127399",
       icon: <FaWhatsapp className="text-yellow-500 text-2xl" />,
     },
     {

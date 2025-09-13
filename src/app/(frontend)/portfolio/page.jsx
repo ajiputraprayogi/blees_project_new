@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import PortfolioPage from "../components/section/portfolio";
 
 export default function Portfolio() {
   // List video (bisa ganti id sesuai YouTube)
@@ -19,10 +20,12 @@ export default function Portfolio() {
   }, []);
 
   return (
+    <>
+     <PortfolioPage />
     <section className="min-h-screen bg-black text-yellow-400 px-6 py-16">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Portfolio</h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">Video Portfolio</h1>
         <p className="text-gray-300 text-lg">
           Kumpulan project video kami yang menampilkan karya terbaik.
         </p>
@@ -54,5 +57,6 @@ export default function Portfolio() {
         ))}
       </div>
     </section>
+    </>
   );
 }
