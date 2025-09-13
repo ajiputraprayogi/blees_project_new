@@ -22,7 +22,7 @@ export default function PortfolioPage() {
     // ganti URL sesuai endpoint API kamu
     const fetchProjects = async () => {
       try {
-        const res = await fetch("/dummyapi/data"); 
+        const res = await fetch("/api/portofolio"); 
         if (!res.ok) throw new Error("Failed to fetch data");
         const data: Project[] = await res.json();
         setProjects(data);
@@ -86,7 +86,7 @@ export default function PortfolioPage() {
 
 {/* Desktop (full) */}
 <p className="text-gray-300 text-sm hidden md:block">
-  {proj.desc}
+  {proj.desc.split(" ").slice(0, 15).join(" ") + "..."}
 </p>
       </div>
     </Link>
