@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { createClient } from "@supabase/supabase-js";
+import slugify from "slugify"; // ✅ pastikan sudah install: npm i slugify
 
 if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("Supabase environment variables are missing");
@@ -62,6 +63,8 @@ export async function PUT(req, context) {
     }
 
     let imageUrl = existing.image;
+
+    // ✅ Upload file baru jika ada
     if (file && file.size > 0) {
       if (existing.image) {
         const oldFilePath = existing.image.split("/").pop();
@@ -70,7 +73,12 @@ export async function PUT(req, context) {
 
       const buffer = Buffer.from(await file.arrayBuffer());
       const ext = file.name.split(".").pop();
-      const fileName = `${Date.now()}.${ext}`;
+
+      // ✅ Buat slug dari name untuk dijadikan prefix file
+      const slugPrefix = slugify(name ?? existing.name, { lower: true, strict: true });
+
+      // ✅ Nama file menjadi slug-timestamp.ext
+      const fileName = `${slugPrefix}-${Date.now()}.${ext}`;
       const filePath = fileName;
 
       const { error: uploadError } = await supabase.storage
