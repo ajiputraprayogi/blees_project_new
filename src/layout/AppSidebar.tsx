@@ -261,16 +261,21 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [
-      {
-        name: "Form Elements",
-        path: "/backend/form-elements",
-        permission: "view-forms",
-      },
-    ],
+    icon: '',
+    name: "Portofolio",
+    path: "/backend/portofolio",
   },
+  // {
+  //   name: "Forms",
+  //   icon: <ListIcon />,
+  //   subItems: [
+  //     {
+  //       name: "Form Elements",
+  //       path: "/backend/form-elements",
+  //       permission: "view-forms",
+  //     },
+  //   ],
+  // },
   {
     name: "Settings",
     icon: <PlugInIcon />,
