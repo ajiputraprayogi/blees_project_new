@@ -22,7 +22,7 @@ export default function BenefitSection() {
   const keuntungan = [
     "Quality Control Berlapis, 3-4 Tier Arsitek untuk 1 project",
     "Mengadopsi Kenyamanan ala Liburan di Villa",
-    "Tampilan Mewah Tropis Khas Emporio Architect",
+    "Tampilan Mewah Tropis Khas Bless Architect Architect",
     "Tata Ruang Lega, Sirkulasi Udara Hybrid dan Cahaya Terang Alami",
     "Mendapatkan Perencanaan Keamanan Struktur",
     "Bantuan Koordinasi Gambar Saat Pembangunan",
