@@ -12,6 +12,7 @@ interface Project {
   desc: string;
   img: string;
   size: string;
+  slug: string;
 }
 
 export default function PortfolioPage() {
@@ -22,7 +23,7 @@ export default function PortfolioPage() {
     // ganti URL sesuai endpoint API kamu
     const fetchProjects = async () => {
       try {
-        const res = await fetch("/api/portofolio"); 
+        const res = await fetch("/api/portofolio/"); 
         if (!res.ok) throw new Error("Failed to fetch data");
         const data: Project[] = await res.json();
         setProjects(data);
@@ -68,7 +69,7 @@ export default function PortfolioPage() {
     transition={{ delay: idx * 0.1, duration: 0.5 }}
     className={`bg-gray-900 rounded-xl overflow-hidden flex flex-col group ${proj.size}`}
   >
-    <Link href={`/portfolio/${proj.id}`} className="relative w-full h-64 sm:h-full block">
+    <Link href={`/portfolio/${proj.slug}`} className="relative w-full h-64 sm:h-full block">
       <Image
         src={proj.img}
         alt={proj.title}
