@@ -37,9 +37,9 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="flex items-center justify-between p-6 mx-auto fixed top-0 z-50 w-full backdrop-blur bg-black/15">
+      <nav className="flex items-center justify-between p-3 mx-auto fixed top-0 z-50 w-full backdrop-blur bg-black/15">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex flex-1 items-center gap-2">
           <Image
             src="/images/brand/logos.png"
             alt="Bless Architect Logo"
@@ -50,12 +50,12 @@ export default function Navbar() {
         </Link>
 
         {/* Menu Desktop */}
-        <ul className="hidden md:flex gap-6 text-white">
+        <ul className="hidden md:flex flex-2 gap-6 text-white">
           {menuItems.map((item, i) => (
             <li key={i}>
               <Link
                 href={item.href}
-                className="hover:text-yellow-300 transition-colors duration-300"
+                className="hover:text-yellow-300 text-md transition-colors duration-300"
               >
                 {item.name}
               </Link>
@@ -64,12 +64,12 @@ export default function Navbar() {
         </ul>
 
         {/* Button Desktop */}
-        <Link
+        {/* <Link
           href="/kontak"
-          className="hidden md:block bg-yellow-400 text-black px-4 py-2 rounded-full hover:bg-yellow-500 transition"
+          className="hidden md:block text-sm bg-yellow-400 text-black px-3 py-2 rounded-full hover:bg-yellow-500 transition"
         >
           Hubungi Kami
-        </Link>
+        </Link> */}
 
         {/* Hamburger Mobile */}
         <div className="md:hidden text-yellow-400">

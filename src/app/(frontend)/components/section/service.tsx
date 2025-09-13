@@ -56,7 +56,7 @@ export default function ServicePage() {
           viewport={{ once: true, amount: 0.2 }}
           className="
             scrollbar-hide flex flex-wrap content-start gap-6 overflow-x-auto
-            max-h-[calc(2*16rem+1.5rem)]
+            max-h-[calc(2*25rem+1.5rem)]
             sm:grid sm:gap-8 sm:grid-cols-2 lg:grid-cols-4 sm:auto-rows-[300px]
             sm:grid-flow-dense
           "

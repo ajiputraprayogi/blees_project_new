@@ -10,6 +10,7 @@ export default function AOSInitializer() {
       duration: 800, // durasi animasi ms
       once: false,   // false = animasi jalan tiap kali scroll
       offset: 100,   // jarak sebelum trigger
+      mirror: true,
     });
   }, []);
 

@@ -52,11 +52,10 @@ export default function LuxuryContractor() {
           className="relative z-10 text-center max-w-2xl px-4"
         >
           <h1 className="text-4xl md:text-6xl font-bold mb-4 text-yellow-400 text-glow-gold">
-            Bless Luxury <br /> <span className="text-white">Architect</span>
+            Bless Luxury <br /> <span className="text-white">Contractor</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-200">
-            Transformasikan rumah impian Anda menjadi kenyataan dengan desain
-            mewah dan eksklusif.
+            Transformasikan rumah impian Anda menjadi kenyataan <br />Solusi Tepat, Hunian Hebat.
           </p>
         </motion.div>
       </section>

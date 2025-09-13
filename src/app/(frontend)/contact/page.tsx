@@ -1,15 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FaInstagram, FaFacebook, FaLinkedin, FaTwitter, FaEnvelope } from "react-icons/fa";
+import { FaInstagram, FaFacebook, FaLinkedin, FaTwitter, FaEnvelope, FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
 import OrderForm from "../components/section/order";
 
 export default function ContactPage() {
   const socials = [
+        {
+      name: "Whatsapp",
+      href: "https://wa.me/6285176795609",
+      icon: <FaWhatsapp className="text-yellow-500 text-2xl" />,
+    },
     {
       name: "Instagram",
-      href: "https://instagram.com/",
+      href: "https://www.instagram.com/bless.kontraktor/",
       icon: <FaInstagram className="text-yellow-500 text-2xl" />,
     },
     {
@@ -29,7 +34,7 @@ export default function ContactPage() {
     },
     {
       name: "Email",
-      href: "mailto:blessarchitect@email.com",
+      href: "mailto:blesscontractor@gmail.com",
       icon: <FaEnvelope className="text-yellow-400 text-2xl" />,
     },
   ];
