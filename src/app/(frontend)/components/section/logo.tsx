@@ -9,7 +9,7 @@ export default function BrandPage() {
       
       {/* Title */}
       <div className="w-full mb-12">
-        <h2 className="text-center text-4xl md:text-5xl font-extrabold text-yellow-400" data-aos="fade-up">
+        <h2 className="text-left text-4xl md:text-5xl font-extrabold text-yellow-400" data-aos="fade-up">
           Makna Logo
         </h2>
       </div>

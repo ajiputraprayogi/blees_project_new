@@ -11,7 +11,6 @@ import MottoPage from "./components/section/motto";
 // import StepPage from "./components/section/langkah";
 import ServicePage from "./components/section/service";
 import StepCard from "./components/section/step";
-import StepSection from "./components/section/tahapan";
 
 export default function LuxuryContractor() {
   const infoData = [
@@ -69,9 +68,6 @@ export default function LuxuryContractor() {
 
       {/* Motto Section */}
       <BenefitSection/>
-
-      {/* Step Section */}
-      <StepSection/>
 
       {/* Motto Section */}
       <MottoPage/>
