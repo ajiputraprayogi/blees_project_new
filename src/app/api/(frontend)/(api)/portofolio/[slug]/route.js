@@ -1,14 +1,8 @@
-// src/app/(frontend)/dummyapi/data/[slug]/route.ts
+// src/app/(frontend)/dummyapi/data/[slug]/route.js
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
-interface Params {
-  params: {
-    slug: string;
-  };
-}
-
-export async function GET(_: Request, { params }: Params) {
+export async function GET(_, { params }) {
   try {
     const { slug } = params;
 
