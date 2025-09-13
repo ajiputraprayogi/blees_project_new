@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
 import SkeletonTable from "@/components/skeleton/Table";
+import AddPermissionsButton from "./AddPermissionsButton";
 
 type Permission = { id: number; name: string };
 
@@ -89,7 +90,7 @@ function PermissionsPage() {
         <PageBreadcrumb pageTitle="Data Permissions" />
         <ComponentCard
           title="Data Permissions Table"
-          // headerRight={canAdd && <AddPermissionsButton />}
+          headerRight={canAdd && <AddPermissionsButton />}
         >
           <SkeletonTable />
         </ComponentCard>
@@ -102,7 +103,7 @@ function PermissionsPage() {
       <PageBreadcrumb pageTitle="Data Permissions" />
       <ComponentCard
         title="Data Permissions Table"
-        // headerRight={canAdd && <AddPermissionsButton />}
+        headerRight={canAdd && <AddPermissionsButton />}
       >
         <Table>
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
