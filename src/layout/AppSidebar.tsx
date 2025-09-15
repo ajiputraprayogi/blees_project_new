@@ -265,6 +265,11 @@ const navItems: NavItem[] = [
     name: "Portofolio",
     path: "/backend/portofolio",
   },
+  {
+    icon: '',
+    name: "Kontak",
+    path: "/backend/kontak",
+  },
   // {
   //   name: "Forms",
   //   icon: <ListIcon />,
