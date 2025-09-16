@@ -3,11 +3,11 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/button/Button";
 
-export default function AddContactButton() {
+export default function AddTimButton() {
   const router = useRouter();
 
   function handleAdd() {
-    router.push("/backend/kontak/create"); // ✅ arahkan ke halaman tambah kontak
+    router.push("/backend/tim/create"); // ✅ arahkan ke halaman tambah tim
   }
 
   return (
