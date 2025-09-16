@@ -106,63 +106,69 @@ function ContactPage() {
         title="Data Kontak Table"
         headerRight={canAdd && <AddContactButton />}
       >
-        <Table>
-          <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-            <TableRow>
-              <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                Platform
-              </TableCell>
-              <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                Link
-              </TableCell>
-              <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
-                Actions
-              </TableCell>
-            </TableRow>
-          </TableHeader>
+        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+          <div className="max-w-full overflow-x-auto">
+            <div className="min-w-[800px]">
+              <Table>
+                <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+                  <TableRow>
+                    <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                      Platform
+                    </TableCell>
+                    <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                      Link
+                    </TableCell>
+                    <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
+                      Actions
+                    </TableCell>
+                  </TableRow>
+                </TableHeader>
 
-          <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-            {contacts.map((contact) => (
-              <TableRow key={contact.id}>
-                <TableCell className="px-5 py-4 sm:px-6 text-start">
-                  <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                    {contact.platform}
-                  </span>
-                </TableCell>
-                <TableCell className="px-5 py-4 sm:px-6 text-start">
-                  <a href={contact.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-                    {contact.url}
-                  </a>
-                </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-center text-theme-sm dark:text-gray-400">
-                  <div className="flex justify-center gap-2">
-                    {canEdit && (
-                      <Button
-                        size="xs"
-                        variant="warning"
-                        onClick={() => handleEdit(contact.id)}
-                      >
-                        Edit
-                      </Button>
-                    )}
-                    {canDelete && (
-                      <Button
-                        size="xs"
-                        variant="danger"
-                        onClick={() => handleDelete(contact.id)}
-                      >
-                        Hapus
-                      </Button>
-                    )}
-                    {!canEdit && !canDelete && (
-                      <span className="text-gray-400">No Actions</span>
-                    )}
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                  {contacts.map((contact) => (
+                    <TableRow key={contact.id}>
+                      <TableCell className="px-5 py-4 sm:px-6 text-start">
+                        <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                          {contact.platform}
+                        </span>
+                      </TableCell>
+                      <TableCell className="px-5 py-4 sm:px-6 text-start">
+                        <a href={contact.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                          {contact.url}
+                        </a>
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-center text-theme-sm dark:text-gray-400">
+                        <div className="flex justify-center gap-2">
+                          {canEdit && (
+                            <Button
+                              size="xs"
+                              variant="warning"
+                              onClick={() => handleEdit(contact.id)}
+                            >
+                              Edit
+                            </Button>
+                          )}
+                          {canDelete && (
+                            <Button
+                              size="xs"
+                              variant="danger"
+                              onClick={() => handleDelete(contact.id)}
+                            >
+                              Hapus
+                            </Button>
+                          )}
+                          {!canEdit && !canDelete && (
+                            <span className="text-gray-400">No Actions</span>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </div>
       </ComponentCard>
     </div>
   );

@@ -236,6 +236,9 @@ import {
   HorizontaLDots,
   ListIcon,
   PlugInIcon,
+  BoxCubeIcon,
+  EnvelopeIcon,
+  GroupIcon
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
 
@@ -261,14 +264,19 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    icon: '',
+    icon: <BoxCubeIcon />,
     name: "Portofolio",
     path: "/backend/portofolio",
   },
   {
-    icon: '',
+    icon: <EnvelopeIcon />,
     name: "Kontak",
     path: "/backend/kontak",
+  },
+  {
+    icon:  <GroupIcon />,
+    name: "Tim",
+    path: "/backend/tim",
   },
   // {
   //   name: "Forms",
