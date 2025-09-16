@@ -80,5 +80,14 @@ model tim {
   posisi     String    @db.VarChar(100)
   created_at DateTime? @default(now()) @db.Timestamp(6)
   updated_at DateTime? @default(now()) @db.Timestamp(6)
-  image      String?    @db.VarChar(255)
+  image      String?   @db.VarChar
+}
+
+model chat {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  description String
+  discount    Int
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @default(now()) @updatedAt @db.Timestamp(6)
 }
