@@ -238,7 +238,8 @@ import {
   PlugInIcon,
   BoxCubeIcon,
   EnvelopeIcon,
-  GroupIcon
+  GroupIcon,
+  ChatIcon
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
 
@@ -277,6 +278,11 @@ const navItems: NavItem[] = [
     icon:  <GroupIcon />,
     name: "Tim",
     path: "/backend/tim",
+  },
+  {
+    icon:  <ChatIcon />,
+    name: "Chat",
+    path: "/backend/chat",
   },
   // {
   //   name: "Forms",
