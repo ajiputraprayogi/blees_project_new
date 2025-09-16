@@ -44,11 +44,11 @@ export default function PricePage() {
       {/* Title */}
       <section className="mb-12 text-center">
         <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">
-          BIAYA / FEE / HARGA JASA DESAIN RUMAH TERBARU TAHUN 2025
+          KONSULTASI JASA DESAIN RUMAH TERBARU TAHUN 2025
         </h1>
         <p className="mt-4 text-sm md:text-base text-neutral-400">
-          Untuk mendapatkan proposal biaya dari Arsitek kami, silahkan isi form
-          pemesanan atau kirimkan data via WhatsApp. Proposal harga dilengkapi
+          Untuk mendapatkan konsultasi biaya dari Arsitek kami, silahkan hubungi
+          admin via WhatsApp. Proposal harga dilengkapi
           dengan sketsa denah konsep dalam 1–7 hari kerja. Jika diperlukan, bisa
           dilakukan online meeting awal.
         </p>

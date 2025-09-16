@@ -100,7 +100,7 @@ export default function Navbar() {
             </Link>
           ))}
           <Link
-            href="/kontak"
+            href="https://wa.me/6281234127399"
             className="bg-yellow-400 text-black px-4 py-2 rounded-full hover:bg-yellow-500 transition"
             onClick={() => setIsOpen(false)}
           >

@@ -12,6 +12,7 @@ import MottoPage from "./components/section/motto";
 import ServicePage from "./components/section/service";
 import StepCard from "./components/section/step";
 import StepSection from "./components/section/tahapan";
+import WhatsAppChatbot from "./components/slices/chat";
 
 export default function LuxuryContractor() {
   const infoData = [
@@ -81,6 +82,9 @@ export default function LuxuryContractor() {
 
       {/* Step Section */}
       {/* <StepPage/> */}
+
+      {/* Whatsapp Chatbot */}
+      <WhatsAppChatbot/>
     </div>
   );
 }
