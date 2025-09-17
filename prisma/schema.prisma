@@ -11,6 +11,7 @@ datasource db {
 model permissions {
   id                   Int                    @id @default(autoincrement())
   name                 String                 @unique
+  grup                 String?                @db.VarChar
   role_has_permissions role_has_permissions[]
 }
 
@@ -90,4 +91,14 @@ model chat {
   discount    Int
   created_at  DateTime? @default(now()) @db.Timestamp(6)
   updated_at  DateTime? @default(now()) @updatedAt @db.Timestamp(6)
+}
+
+model faq {
+  id         Int       @id @default(autoincrement())
+  question   String    @db.VarChar(255)
+  answer     String
+  isActive   Boolean?  @default(true)
+  sortOrder  Int?      @default(0)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @default(now()) @updatedAt @db.Timestamp(6)
 }
