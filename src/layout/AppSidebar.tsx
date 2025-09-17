@@ -234,12 +234,12 @@ import { useSidebar } from "../context/SidebarContext";
 import {
   ChevronDownIcon,
   HorizontaLDots,
-  ListIcon,
   PlugInIcon,
   BoxCubeIcon,
   EnvelopeIcon,
   GroupIcon,
-  ChatIcon
+  ChatIcon,
+  InfoIcon
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
 
@@ -283,6 +283,11 @@ const navItems: NavItem[] = [
     icon:  <ChatIcon />,
     name: "Chat",
     path: "/backend/chat",
+  },
+  {
+    icon:  <InfoIcon />,
+    name: "FAQ",
+    path: "/backend/faq",
   },
   // {
   //   name: "Forms",
