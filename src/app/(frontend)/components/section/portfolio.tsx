@@ -23,7 +23,7 @@ export default function PortfolioPage() {
     // ganti URL sesuai endpoint API kamu
     const fetchProjects = async () => {
       try {
-        const res = await fetch("/api/portofolio/"); 
+        const res = await fetch("/api/portofolio/");
         if (!res.ok) throw new Error("Failed to fetch data");
         const data: Project[] = await res.json();
         setProjects(data);
@@ -62,37 +62,37 @@ export default function PortfolioPage() {
           "
         >
           {projects.map((proj, idx) => (
-  <motion.div
-    key={proj.id || idx}
-    initial={{ opacity: 0, y: 30 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: idx * 0.1, duration: 0.5 }}
-    className={`bg-gray-900 rounded-xl overflow-hidden flex flex-col group ${proj.size}`}
-  >
-    <Link href={`/portfolio/${proj.slug}`} className="relative w-full h-64 sm:h-full block">
-      <Image
-        src={proj.img}
-        alt={proj.title}
-        fill
-        className="object-cover group-hover:scale-105 transition-transform duration-500"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-5">
-        <h3 className="text-lg text-yellow-300 font-semibold mb-2">
-          {proj.title}
-        </h3>
-        {/* Mobile (dipotong 5 kata) */}
-<p className="text-gray-300 text-sm md:hidden">
-  {proj.desc.split(" ").slice(0, 5).join(" ") + "..."}
-</p>
+            <motion.div
+              key={proj.id || idx}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1, duration: 0.5 }}
+              className={`bg-gray-900 rounded-xl overflow-hidden flex flex-col group ${proj.size}`}
+            >
+              <Link href={`/portfolio/${proj.slug}`} className="relative w-full h-64 sm:h-full block">
+                <Image
+                  src={proj.img}
+                  alt={proj.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-5">
+                  <h3 className="text-lg text-yellow-300 font-semibold mb-2">
+                    {proj.title}
+                  </h3>
+                  {/* Mobile (dipotong 5 kata) */}
+                  {/* <p className="text-gray-300 text-sm md:hidden">
+                    {proj.desc.split(" ").slice(0, 5).join(" ") + "..."}
+                  </p> */}
 
-{/* Desktop (full) */}
-<p className="text-gray-300 text-sm hidden md:block">
-  {proj.desc.split(" ").slice(0, 15).join(" ") + "..."}
-</p>
-      </div>
-    </Link>
-  </motion.div>
-))}
+                  {/* Desktop (full) */}
+                  {/* <p className="text-gray-300 text-sm hidden md:block">
+                    {proj.desc.split(" ").slice(0, 15).join(" ") + "..."}
+                  </p> */}
+                </div>
+              </Link>
+            </motion.div>
+          ))}
         </motion.div>
       )}
     </div>
