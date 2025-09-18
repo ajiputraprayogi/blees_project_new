@@ -239,7 +239,8 @@ import {
   EnvelopeIcon,
   GroupIcon,
   ChatIcon,
-  InfoIcon
+  InfoIcon,
+  DollarLineIcon
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
 
@@ -288,6 +289,11 @@ const navItems: NavItem[] = [
     icon:  <InfoIcon />,
     name: "FAQ",
     path: "/backend/faq",
+  },
+  {
+    icon:  <DollarLineIcon />,
+    name: "Paket",
+    path: "/backend/paket",
   },
   // {
   //   name: "Forms",
