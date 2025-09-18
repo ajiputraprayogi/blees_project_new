@@ -453,7 +453,7 @@ type RoleWithPermissions = {
   role_has_permissions: { permission_id: number }[];
 };
 
-// Global cache biar tidak fetch ulang
+// ✅ cache global
 let permissionsCache: Permission[] | null = null;
 
 function EditRole() {
@@ -470,12 +470,11 @@ function EditRole() {
   // fetch role & permissions
   useEffect(() => {
     if (!params.id) return;
-
     const abortController = new AbortController();
 
     async function fetchData() {
       try {
-        // render cepat pakai cache dulu
+        // render cepat pakai cache
         if (permissionsCache) setPermissions(permissionsCache);
 
         const [roleRes, permRes] = await Promise.all([
@@ -507,7 +506,7 @@ function EditRole() {
     return () => abortController.abort();
   }, [params.id]);
 
-  // toggle permission
+  // toggle satu permission
   function togglePermission(id: number) {
     setSelectedPermissions((prev) =>
       prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
@@ -516,14 +515,12 @@ function EditRole() {
 
   // toggle semua permissions
   function toggleAllPermissions() {
-    if (selectedPermissions.length === permissions.length) {
-      setSelectedPermissions([]);
-    } else {
-      setSelectedPermissions(permissions.map((p) => p.id));
-    }
+    setSelectedPermissions((prev) =>
+      prev.length === permissions.length ? [] : permissions.map((p) => p.id)
+    );
   }
 
-  // toggle semua permissions per grup
+  // toggle semua per grup
   function toggleAllGroupPermissions(groupPerms: Permission[]) {
     const allSelected = groupPerms.every((p) => selectedPermissions.includes(p.id));
     if (allSelected) {
@@ -533,7 +530,6 @@ function EditRole() {
     }
   }
 
-  // submit
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -550,8 +546,8 @@ function EditRole() {
 
       if (!res.ok) throw new Error("Gagal update role");
 
-      // refresh permissions user real-time
-      await refresh();
+      // ✅ refresh permission context secara global
+      await refresh(); // pastikan fetch ulang dari server
 
       router.push("/backend/roles");
     } catch (error) {
@@ -603,13 +599,13 @@ function EditRole() {
 
           <div>
             <Label>Permissions</Label>
-            <div className="space-y-4 overflow-auto border border-gray-300 dark:border-gray-700 rounded p-2 dark:text-gray-200 max-h-72">
+            <div className="space-y-4 overflow-auto border rounded p-2 max-h-72">
               {Object.entries(grupedPermissions).map(([grupName, perms]) => {
                 const allGroupSelected = perms.every((p) => selectedPermissions.includes(p.id));
                 return (
-                  <div key={grupName} className="border rounded-md p-3 mb-3 dark:border-gray-700">
+                  <div key={grupName} className="border rounded-md p-3 mb-3">
                     <div className="flex items-center justify-between mb-2">
-                      <p className="font-semibold text-gray-700 dark:text-gray-100">{grupName}</p>
+                      <p className="font-semibold">{grupName}</p>
                       <Checkbox
                         checked={allGroupSelected}
                         onCheckedChange={() => toggleAllGroupPermissions(perms)}
