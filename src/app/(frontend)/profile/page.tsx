@@ -1,54 +1,52 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import LogoMeaningPage from "../components/section/logo";
 
+interface TeamMember {
+  id: number;
+  title: string;
+  desc: string;
+  img: string;
+  size: string;
+}
+
 export default function ProfilePage() {
-  const team = [
-    {
-      name: "Ferry Irwandi",
-      role: "Founder & CEO",
-      img: "/images/user/ferry.jpg",
-      span: "col-span-2 row-span-2", // lebih besar
-    },
-    {
-      name: "Ferry Irwandi 2",
-      role: "Lead Architect",
-      img: "/images/user/ferry.jpg",
-      span: "",
-    },
-    {
-      name: "Ferry Irwandi 3",
-      role: "Interior Designer",
-      img: "/images/user/ferry.jpg",
-      span: "",
-    },
-    {
-      name: "Ferry Irwandi 4",
-      role: "Project Manager",
-      img: "/images/user/ferry.jpg",
-      span: "col-span-2", // lebar
-    },
-  ];
+  const [team, setTeam] = useState<TeamMember[]>([]);
+
+  // Fetch tim dari API
+  useEffect(() => {
+    const fetchTeam = async () => {
+      try {
+        const res = await fetch("/api/tim"); // endpoint API kamu
+        const data = await res.json();
+        setTeam(data);
+      } catch (error) {
+        console.error("Gagal fetch tim:", error);
+      }
+    };
+    fetchTeam();
+  }, []);
 
   return (
     <div className="bg-black text-white min-h-screen py-16 px-3 md:px-12 lg:px-0 space-y-20">
       {/* Logo Meaning */}
       <LogoMeaningPage />
+
       {/* Sejarah Perusahaan */}
-      <section className="max-w-4xl mx-auto text-center space-y-6 mb-10" data-aos="fade-up">
+      <section
+        className="max-w-4xl mx-auto text-center space-y-6 mb-10"
+        data-aos="fade-up"
+      >
         <h2 className="text-4xl md:text-5xl font-bold text-left md:text-center text-yellow-400 px-5 md:px-0">
           Sejarah Perusahaan
         </h2>
         <p className="text-gray-300 leading-relaxed text-left md:text-center px-5 md:px-0">
-          Bless Kontraktor hadir sebagai jawaban atas kebutuhan masyarakat akan layanan kontraktor dan desain bangunan yang tidak hanya fungsional, tetapi juga menghadirkan nilai estetika dan kemewahan. Dengan semangat memberikan berkah dalam setiap karya, Bless Kontraktor mengedepankan kualitas, detail, serta inovasi dalam setiap proyek yang dikerjakan.
-<br /> <br />
-Didukung oleh tim profesional yang berpengalaman di bidang arsitektur, desain interior, dan konstruksi, Bless Kontraktor berkomitmen menghadirkan solusi pembangunan yang efisien, transparan, dan terpercaya. Fokus kami tidak sekadar membangun hunian atau gedung, tetapi juga mewujudkan ruang yang mampu merepresentasikan identitas, gaya hidup, dan kenyamanan bagi penggunanya.
-<br /> <br />
-Mengusung identitas sebagai Luxury Contractor, Bless Kontraktor menempatkan diri pada standar yang lebih tinggi dalam hal desain, material, serta pengerjaan. Setiap proyek adalah karya yang dibangun dengan integritas, ketelitian, dan dedikasi, sehingga menghasilkan bangunan yang kokoh, elegan, dan bernilai jangka panjang.
-<br /> <br />
-Dengan visi menjadi kontraktor terpercaya dan pilihan utama dalam menghadirkan bangunan premium, Bless Kontraktor siap menjadi mitra terbaik dalam mewujudkan impian klien melalui layanan menyeluruh, mulai dari perencanaan, desain 3D, visualisasi, hingga pembangunan yang detail dan terukur.
+          Bless Kontraktor hadir sebagai jawaban atas kebutuhan masyarakat akan
+          layanan kontraktor dan desain bangunan yang tidak hanya fungsional,
+          tetapi juga menghadirkan nilai estetika dan kemewahan. ...
         </p>
       </section>
 
@@ -62,7 +60,8 @@ Dengan visi menjadi kontraktor terpercaya dan pilihan utama dalam menghadirkan b
         >
           <h3 className="text-2xl font-bold text-yellow-400 mb-4">Visi</h3>
           <p className="text-gray-300 leading-relaxed">
-            Menjadi perusahaan kontraktor dan desain bangunan terpercaya di Indonesia yang menghadirkan karya berkualitas, inovatif, dan efisien, serta mampu mewujudkan hunian dan bangunan impian yang bernilai jangka panjang.
+            Menjadi perusahaan kontraktor dan desain bangunan terpercaya di
+            Indonesia...
           </p>
         </motion.div>
 
@@ -74,17 +73,29 @@ Dengan visi menjadi kontraktor terpercaya dan pilihan utama dalam menghadirkan b
         >
           <h3 className="text-2xl font-bold text-yellow-400 mb-4">Misi</h3>
           <ul className="list-disc list-outside text-gray-300 space-y-2">
-            <li>Memberikan layanan desain dan pembangunan yang detail, transparan, dan profesional.</li>
-            {/* <li>Menciptakan desain yang fungsional, estetis, dan berkelanjutan.</li> */}
-            <li>Menghadirkan solusi efisiensi biaya tanpa mengurangi kualitas hasil pekerjaan.</li>
-            <li>Menggunakan teknologi terbaru dalam visualisasi dan perencanaan proyek.</li>
-            <li>Membangun hubungan jangka panjang dengan klien melalui kepercayaan, kepuasan, dan integritas.</li>
-            <li>Mengembangkan tim yang kompeten, kreatif, dan berkomitmen tinggi dalam setiap proyek.</li>
+            <li>
+              Memberikan layanan desain dan pembangunan yang detail, transparan,
+              dan profesional.
+            </li>
+            <li>
+              Menghadirkan solusi efisiensi biaya tanpa mengurangi kualitas hasil
+              pekerjaan.
+            </li>
+            <li>
+              Menggunakan teknologi terbaru dalam visualisasi dan perencanaan
+              proyek.
+            </li>
+            <li>
+              Membangun hubungan jangka panjang dengan klien melalui kepercayaan,
+              kepuasan, dan integritas.
+            </li>
+            <li>
+              Mengembangkan tim yang kompeten, kreatif, dan berkomitmen tinggi
+              dalam setiap proyek.
+            </li>
           </ul>
         </motion.div>
       </section>
-
-      
 
       {/* Team */}
       <section>
@@ -103,23 +114,23 @@ Dengan visi menjadi kontraktor terpercaya dan pilihan utama dalam menghadirkan b
         >
           {team.map((member, idx) => (
             <motion.div
-              key={idx}
+              key={member.id}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1, duration: 0.5 }}
-              className={`relative overflow-hidden rounded-2xl bg-zinc-900 group ${member.span}`}
+              className={`relative overflow-hidden rounded-2xl bg-zinc-900 group ${member.size}`}
             >
               <Image
                 src={member.img}
-                alt={member.name}
+                alt={member.title}
                 fill
                 className="object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-5">
                 <h3 className="text-lg font-semibold text-yellow-300">
-                  {member.name}
+                  {member.title}
                 </h3>
-                <p className="text-gray-300 text-sm">{member.role}</p>
+                <p className="text-gray-300 text-sm">{member.desc}</p>
               </div>
             </motion.div>
           ))}

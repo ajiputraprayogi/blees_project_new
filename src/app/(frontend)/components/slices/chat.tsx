@@ -4,9 +4,16 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Circle } from "lucide-react";
 
+interface Promo {
+  id: number;
+  title: string;
+  description: string;
+  discount: number;
+}
+
 export default function WhatsAppChatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [promo, setPromo] = useState<{ description: string; discount: number } | null>(null);
+  const [promo, setPromo] = useState<Promo | null>(null);
 
   // Nomor WhatsApp tujuan
   const phoneNumber = "6281234127399";
@@ -15,8 +22,9 @@ export default function WhatsAppChatbot() {
   useEffect(() => {
     const fetchPromo = async () => {
       try {
-        const res = await fetch("/dummyapi/promo");
-        const data = await res.json();
+        const res = await fetch("/api/chat"); // ✅ ambil dari api/chat
+        if (!res.ok) throw new Error("Gagal fetch promo");
+        const data: Promo = await res.json();
         setPromo(data);
       } catch (error) {
         console.error("Gagal fetch promo:", error);
@@ -25,12 +33,12 @@ export default function WhatsAppChatbot() {
     fetchPromo();
   }, []);
 
-  // Default message kalau API belum kebuka
+  // Pesan promo default
   const promoMessage = promo
-    ? `Halo, saya tertarik dengan promo spesial diskon ${promo.discount}% untuk semua layanan! 🙌`
+    ? `Halo, saya tertarik dengan ${promo.title}! ${promo.description} Diskon ${promo.discount}% 🙌`
     : "Halo, saya tertarik dengan promo spesial hari ini! 🙌";
 
-  // Encode biar aman di URL
+  // Encode pesan biar aman di URL
   const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
     promoMessage
   )}`;
@@ -78,7 +86,7 @@ export default function WhatsAppChatbot() {
             <div className="p-4 space-y-3">
               <div className="flex items-start space-x-2">
                 <div className="bg-yellow-500 text-black px-3 py-2 rounded-xl text-sm shadow shadow-white/10">
-                  👋 Halo! &nbsp; 
+                  👋 Halo! &nbsp;
                   {promo ? promo.description : "Promo sedang dimuat..."}
                 </div>
               </div>

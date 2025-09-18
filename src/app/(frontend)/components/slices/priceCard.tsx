@@ -10,7 +10,9 @@ const packages = [
       "Gambar Kerja Arsitektur (tampak dan potongan)",
     ],
     button: "Pilih Paket",
-    color: "bg-blue-100 text-blue-700", // putih
+    color: "bg-blue-100 text-blue-700",
+    waLink:
+      "https://wa.me/6281234127399?text=Halo%20saya%20ingin%20memesan%20PAKET%20STANDAR", // ganti dengan nomor WA
   },
   {
     name: "PAKET BASIC",
@@ -23,7 +25,9 @@ const packages = [
       "Bonus Perhitungan RAB (Eksterior)",
     ],
     button: "Pilih Paket",
-    color: "bg-green-100 text-green-700", // hijau
+    color: "bg-green-100 text-green-700",
+    waLink:
+      "https://wa.me/6281234127399?text=Halo%20saya%20ingin%20memesan%20PAKET%20BASIC",
   },
   {
     name: "PAKET SILVER",
@@ -36,7 +40,9 @@ const packages = [
       "Desain Interior Bonus",
     ],
     button: "Pilih Paket",
-    color: "bg-gray-100 text-gray-700", // silver
+    color: "bg-gray-100 text-gray-700",
+    waLink:
+      "https://wa.me/6281234127399?text=Halo%20saya%20ingin%20memesan%20PAKET%20SILVER",
   },
   {
     name: "PAKET GOLD",
@@ -50,14 +56,15 @@ const packages = [
       "Detail Interior",
     ],
     button: "Pilih Paket",
-    color: "bg-yellow-100 text-yellow-700", // gold
+    color: "bg-yellow-100 text-yellow-700",
+    waLink:
+      "https://wa.me/6281234127399?text=Halo%20saya%20ingin%20memesan%20PAKET%20GOLD",
   },
 ];
 
 export default function PriceCard() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6 py-16">
-      {/* Heading */}
       <h2
         data-aos="fade-up"
         className="text-3xl md:text-4xl font-bold text-center mb-4"
@@ -73,7 +80,6 @@ export default function PriceCard() {
         berdasarkan luas bangunan (per meter persegi).
       </p>
 
-      {/* Pricing Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-7xl">
         {packages.map((pkg, index) => (
           <div
@@ -82,9 +88,7 @@ export default function PriceCard() {
             data-aos-delay={index * 150}
             className="flex"
           >
-            <div
-              className="flex flex-col h-full w-full bg-gradient-to-b from-gray-900 to-black rounded-2xl border border-gray-700 shadow-lg transform transition-transform ease-in-out duration-300 hover:scale-105 hover:shadow-yellow-700/30"
-            >
+            <div className="flex flex-col h-full w-full bg-gradient-to-b from-gray-900 to-black rounded-2xl border border-gray-700 shadow-lg transform transition-transform ease-in-out duration-300 hover:scale-105 hover:shadow-yellow-700/30">
               {/* Header */}
               <div className="px-6 py-6 border-b border-gray-600 flex flex-col items-start gap-3">
                 <span
@@ -109,15 +113,17 @@ export default function PriceCard() {
 
               {/* Button */}
               <div className="px-6 py-6 border-t border-gray-600">
-                <button
-                  className={`w-full py-2 rounded-xl font-semibold bg-gradient-to-r ${pkg.color} text-black transition-all duration-300 hover:opacity-90 hover:scale-[1.02]`}
+                <a
+                  href={pkg.waLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`block text-center w-full py-2 rounded-xl font-semibold bg-gradient-to-r ${pkg.color} text-black transition-all duration-300 hover:opacity-90 hover:scale-[1.02]`}
                 >
                   {pkg.button}
-                </button>
+                </a>
               </div>
             </div>
           </div>
-
         ))}
       </div>
     </div>

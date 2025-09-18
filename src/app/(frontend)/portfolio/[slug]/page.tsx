@@ -24,7 +24,6 @@ export default function ProjectSlugPage() {
 
     const fetchProject = async () => {
       try {
-        // URL API kamu, contoh pakai endpoint Next.js atau Supabase API
         const res = await fetch(`/api/portofolio/${slug}`);
         if (!res.ok) throw new Error("Failed to fetch project");
 
@@ -44,6 +43,13 @@ export default function ProjectSlugPage() {
   if (loading) return <p className="text-center text-gray-400">Loading...</p>;
   if (!project) return <p className="text-center text-red-400">Project not found</p>;
 
+  const adminNumber = "6281234127399";
+
+  // ✅ Pesan WA otomatis
+  const waMessage = encodeURIComponent(
+    `Halo Admin, saya tertarik dengan project: ${project?.name}`
+  );
+
   return (
     <div className="bg-black text-white min-h-screen py-16 px-6 md:px-12 lg:px-20">
       <div className="max-w-4xl mx-auto">
@@ -51,7 +57,7 @@ export default function ProjectSlugPage() {
           {project.name}
         </h1>
 
-        <div className="relative w-full h-[400px] md:h-[600px] mb-8 mt-5rounded-xl overflow-hidden">
+        <div className="relative w-full h-[400px] md:h-[600px] mb-8 rounded-xl overflow-hidden">
           <Image
             src={project.image || "/images/placeholder.webp"}
             alt={project.name}
@@ -64,7 +70,19 @@ export default function ProjectSlugPage() {
           {project.description}
         </p>
 
-        <p className="text-sm text-gray-500">Created at: {new Date(project.created_at).toLocaleString()}</p>
+        <p className="text-sm text-gray-500 mb-6">
+          Created at: {new Date(project.created_at).toLocaleString()}
+        </p>
+
+        {/* ✅ Tombol Hubungi Admin */}
+        <a
+          href={`https://wa.me/${adminNumber}?text=${waMessage}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-yellow-400 text-black font-semibold px-6 py-3 rounded-xl hover:bg-yellow-300 transition"
+        >
+          Hubungi Admin
+        </a>
       </div>
     </div>
   );

@@ -1,43 +1,53 @@
 "use client";
 
+import { JSX, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FaInstagram, FaFacebook, FaLinkedin, FaTwitter, FaEnvelope, FaWhatsapp } from "react-icons/fa";
+import {
+  FaInstagram,
+  FaFacebook,
+  FaLinkedin,
+  FaTwitter,
+  FaEnvelope,
+  FaWhatsapp,
+  FaTiktok,
+} from "react-icons/fa";
 import Link from "next/link";
 import OrderForm from "../components/section/order";
 
+// mapping icon string → react-icon
+const iconMap: Record<string, JSX.Element> = {
+  instagram: <FaInstagram className="text-yellow-500 text-2xl" />,
+  facebook: <FaFacebook className="text-yellow-500 text-2xl" />,
+  linkedin: <FaLinkedin className="text-yellow-400 text-2xl" />,
+  twitter: <FaTwitter className="text-yellow-400 text-2xl" />,
+  email: <FaEnvelope className="text-yellow-400 text-2xl" />,
+  whatsapp: <FaWhatsapp className="text-yellow-500 text-2xl" />,
+  tiktok: <FaTiktok className="text-yellow-500 text-2xl" />,
+};
+
+interface Contact {
+  id: number;
+  platform: string;
+  url: string;
+  icon: string;
+}
+
 export default function ContactPage() {
-  const socials = [
-        {
-      name: "Whatsapp",
-      href: "https://wa.me/6281234127399",
-      icon: <FaWhatsapp className="text-yellow-500 text-2xl" />,
-    },
-    {
-      name: "Instagram",
-      href: "https://www.instagram.com/bless.kontraktor/",
-      icon: <FaInstagram className="text-yellow-500 text-2xl" />,
-    },
-    {
-      name: "Facebook",
-      href: "https://facebook.com/",
-      icon: <FaFacebook className="text-yellow-500 text-2xl" />,
-    },
-    {
-      name: "LinkedIn",
-      href: "https://linkedin.com/",
-      icon: <FaLinkedin className="text-yellow-400 text-2xl" />,
-    },
-    {
-      name: "Twitter / X",
-      href: "https://twitter.com/",
-      icon: <FaTwitter className="text-yellow-400 text-2xl" />,
-    },
-    {
-      name: "Email",
-      href: "mailto:blesscontractor@gmail.com",
-      icon: <FaEnvelope className="text-yellow-400 text-2xl" />,
-    },
-  ];
+  const [socials, setSocials] = useState<Contact[]>([]);
+
+  // Fetch data dari API
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const res = await fetch("/api/kontak");
+        const data = await res.json();
+        setSocials(data);
+      } catch (error) {
+        console.error("Gagal fetch kontak:", error);
+      }
+    };
+    fetchContacts();
+  }, []);
 
   const fadeIn = {
     hidden: { opacity: 0, y: 30 },
@@ -65,24 +75,28 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10">
           {socials.map((item, i) => (
             <motion.div
-              key={i}
+              key={item.id}
               variants={fadeIn}
               whileHover={{ scale: 1.05 }}
               className="bg-zinc-900 rounded-2xl p-6 flex flex-col items-center justify-center gap-3 shadow-md transition"
             >
-              {item.icon}
+              {iconMap[item.icon] ?? (
+                <FaEnvelope className="text-yellow-400 text-2xl" />
+              )}
               <Link
-                href={item.href}
+                href={item.url}
                 target="_blank"
                 className="font-semibold text-white hover:text-yellow-400 transition"
               >
-                {item.name}
+                {item.platform}
               </Link>
             </motion.div>
           ))}
         </div>
       </motion.div>
-       <OrderForm />
+
+      {/* Order Form */}
+      <OrderForm />
     </section>
   );
 }
