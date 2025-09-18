@@ -599,7 +599,7 @@ function EditRole() {
 
           <div>
             <Label>Permissions</Label>
-            <div className="space-y-4 overflow-auto border rounded p-2 max-h-72">
+            <div className="space-y-4 overflow-auto border rounded p-2">
               {Object.entries(grupedPermissions).map(([grupName, perms]) => {
                 const allGroupSelected = perms.every((p) => selectedPermissions.includes(p.id));
                 return (
