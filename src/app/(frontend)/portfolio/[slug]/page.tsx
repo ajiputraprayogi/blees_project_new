@@ -43,7 +43,7 @@ export default function ProjectSlugPage() {
   if (loading) return <p className="text-center text-gray-400">Loading...</p>;
   if (!project) return <p className="text-center text-red-400">Project not found</p>;
 
-  const adminNumber = "6281234127399";
+  const adminNumber = "6285176965609";
 
   // ✅ Pesan WA otomatis
   const waMessage = encodeURIComponent(
