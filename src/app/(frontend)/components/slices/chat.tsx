@@ -16,7 +16,7 @@ export default function WhatsAppChatbot() {
   const [promo, setPromo] = useState<Promo | null>(null);
 
   // Nomor WhatsApp tujuan
-  const phoneNumber = "6281234127399";
+  const phoneNumber = "6285176965609";
 
   // Fetch promo dari API
   useEffect(() => {

@@ -15,6 +15,8 @@ interface TeamMember {
 
 export default function ProfilePage() {
   const [team, setTeam] = useState<TeamMember[]>([]);
+    const [activeTab, setActiveTab] = useState<"visi" | "misi" | null>(null);
+
 
   // Fetch tim dari API
   useEffect(() => {
@@ -51,51 +53,76 @@ export default function ProfilePage() {
       </section>
 
       {/* Visi Misi */}
-      <section className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="bg-zinc-900 rounded-2xl p-8 shadow-lg"
-        >
-          <h3 className="text-2xl font-bold text-yellow-400 mb-4">Visi</h3>
-          <p className="text-gray-300 leading-relaxed">
-            Menjadi perusahaan kontraktor dan desain bangunan terpercaya di
-            Indonesia...
-          </p>
-        </motion.div>
+    <section className="max-w-3xl mx-auto">
+      <div className="flex justify-center gap-4 mb-8 relative">
+        {/* Visi */}
+        <div className="group relative">
+          <button
+            className="px-6 py-2 rounded-full font-semibold bg-zinc-800 text-gray-300 transition"
+            onClick={() =>
+              setActiveTab((prev) => (prev === "visi" ? null : "visi"))
+            }
+          >
+            Visi
+          </button>
 
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-zinc-900 rounded-2xl p-8 shadow-lg"
-        >
-          <h3 className="text-2xl font-bold text-yellow-400 mb-4">Misi</h3>
-          <ul className="list-disc list-outside text-gray-300 space-y-2">
-            <li>
-              Memberikan layanan desain dan pembangunan yang detail, transparan,
-              dan profesional.
-            </li>
-            <li>
-              Menghadirkan solusi efisiensi biaya tanpa mengurangi kualitas hasil
-              pekerjaan.
-            </li>
-            <li>
-              Menggunakan teknologi terbaru dalam visualisasi dan perencanaan
-              proyek.
-            </li>
-            <li>
-              Membangun hubungan jangka panjang dengan klien melalui kepercayaan,
-              kepuasan, dan integritas.
-            </li>
-            <li>
-              Mengembangkan tim yang kompeten, kreatif, dan berkomitmen tinggi
-              dalam setiap proyek.
-            </li>
-          </ul>
-        </motion.div>
-      </section>
+          <div
+            className={`absolute top-full mt-2 left-1/2 -translate-x-1/2 w-72 bg-zinc-900 p-4 rounded-xl shadow-lg transition-all duration-300 z-10
+              opacity-0 invisible
+              group-hover:opacity-100 group-hover:visible
+              ${activeTab === "visi" ? "opacity-100 visible" : ""}`}
+          >
+            <p className="text-yellow-300 leading-relaxed">
+              Menjadi perusahaan kontraktor dan desain bangunan terpercaya di
+              Indonesia...
+            </p>
+          </div>
+        </div>
+
+        {/* Misi */}
+        <div className="group relative">
+          <button
+            className="px-6 py-2 rounded-full font-semibold bg-zinc-800 text-gray-300 transition"
+            onClick={() =>
+              setActiveTab((prev) => (prev === "misi" ? null : "misi"))
+            }
+          >
+            Misi
+          </button>
+
+          <div
+            className={`absolute top-full mt-2 -translate-x-1/2 w-100 bg-zinc-900 px-8 py-6 md:px-8 md:py-6 rounded-xl shadow-lg transition-all duration-300 z-10
+              opacity-0 invisible
+              group-hover:opacity-100 group-hover:visible
+              ${activeTab === "misi" ? "opacity-100 visible" : ""}`}
+          >
+            <ul className="list-disc list-outside text-yellow-300 space-y-2">
+              <li>
+                Memberikan layanan desain dan pembangunan yang detail,
+                transparan, dan profesional.
+              </li>
+              <li>
+                Menghadirkan solusi efisiensi biaya tanpa mengurangi kualitas
+                hasil pekerjaan.
+              </li>
+              <li>
+                Menggunakan teknologi terbaru dalam visualisasi dan perencanaan
+                proyek.
+              </li>
+              <li>
+                Membangun hubungan jangka panjang dengan klien melalui
+                kepercayaan, kepuasan, dan integritas.
+              </li>
+              <li>
+                Mengembangkan tim yang kompeten, kreatif, dan berkomitmen tinggi
+                dalam setiap proyek.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
 
       {/* Team */}
       <section>

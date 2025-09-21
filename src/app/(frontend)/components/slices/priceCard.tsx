@@ -12,7 +12,7 @@ const packages = [
     button: "Pilih Paket",
     color: "bg-blue-100 text-blue-700",
     waLink:
-      "https://wa.me/6281234127399?text=Halo%20saya%20ingin%20memesan%20PAKET%20STANDAR", // ganti dengan nomor WA
+      "https://wa.me/6285176965609?text=Halo%20saya%20ingin%20memesan%20PAKET%20STANDAR", // ganti dengan nomor WA
   },
   {
     name: "PAKET BASIC",
@@ -27,7 +27,7 @@ const packages = [
     button: "Pilih Paket",
     color: "bg-green-100 text-green-700",
     waLink:
-      "https://wa.me/6281234127399?text=Halo%20saya%20ingin%20memesan%20PAKET%20BASIC",
+      "https://wa.me/6285176965609?text=Halo%20saya%20ingin%20memesan%20PAKET%20BASIC",
   },
   {
     name: "PAKET SILVER",
@@ -42,7 +42,7 @@ const packages = [
     button: "Pilih Paket",
     color: "bg-gray-100 text-gray-700",
     waLink:
-      "https://wa.me/6281234127399?text=Halo%20saya%20ingin%20memesan%20PAKET%20SILVER",
+      "https://wa.me/6285176965609?text=Halo%20saya%20ingin%20memesan%20PAKET%20SILVER",
   },
   {
     name: "PAKET GOLD",
@@ -58,7 +58,7 @@ const packages = [
     button: "Pilih Paket",
     color: "bg-yellow-100 text-yellow-700",
     waLink:
-      "https://wa.me/6281234127399?text=Halo%20saya%20ingin%20memesan%20PAKET%20GOLD",
+      "https://wa.me/6285176965609?text=Halo%20saya%20ingin%20memesan%20PAKET%20GOLD",
   },
 ];
 
@@ -67,9 +67,9 @@ export default function PriceCard() {
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6 py-16">
       <h2
         data-aos="fade-up"
-        className="text-3xl md:text-4xl font-bold text-center mb-4"
+        className="text-3xl md:text-4xl font-bold text-center tracking-tight bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent mb-4"
       >
-        Pilih Paket Jasa Arsitektur
+        Pilih Paket <br />Jasa Arsitektur
       </h2>
       <p
         data-aos="fade-up"
