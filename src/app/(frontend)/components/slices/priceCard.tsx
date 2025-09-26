@@ -1,68 +1,80 @@
-"use client";
+'use client';
 
-const packages = [
-  {
-    name: "PAKET STANDAR",
-    price: "25.000 /M²",
-    features: [
-      "Desain Denah Lantai",
-      "Desain 3D Eksterior (6 view)",
-      "Gambar Kerja Arsitektur (tampak dan potongan)",
-    ],
-    button: "Pilih Paket",
-    color: "bg-blue-100 text-blue-700",
-    waLink:
-      "https://wa.me/6285176965609?text=Halo%20saya%20ingin%20memesan%20PAKET%20STANDAR", // ganti dengan nomor WA
-  },
-  {
-    name: "PAKET BASIC",
-    price: "35.000 /M²",
-    features: [
-      "Desain Denah Lantai",
-      "Desain 3D Eksterior (6 view)",
-      "Potongan A-A",
-      "Potongan B-B",
-      "Bonus Perhitungan RAB (Eksterior)",
-    ],
-    button: "Pilih Paket",
-    color: "bg-green-100 text-green-700",
-    waLink:
-      "https://wa.me/6285176965609?text=Halo%20saya%20ingin%20memesan%20PAKET%20BASIC",
-  },
-  {
-    name: "PAKET SILVER",
-    price: "55.000 /M²",
-    features: [
-      "Desain Denah Lantai",
-      "Desain 3D Eksterior (6 view)",
-      "Gambar DED Lengkap",
-      "Perhitungan RAB (Eksterior)",
-      "Desain Interior Bonus",
-    ],
-    button: "Pilih Paket",
-    color: "bg-gray-100 text-gray-700",
-    waLink:
-      "https://wa.me/6285176965609?text=Halo%20saya%20ingin%20memesan%20PAKET%20SILVER",
-  },
-  {
-    name: "PAKET GOLD",
-    price: "75.000 /M²",
-    features: [
-      "Desain Denah Lantai",
-      "Desain 3D Eksterior (6 View)",
-      "Gambar DED Lengkap",
-      "Perhitungan RAB (Eksterior & Interior)",
-      "Desain Interior 3D",
-      "Detail Interior",
-    ],
-    button: "Pilih Paket",
-    color: "bg-yellow-100 text-yellow-700",
-    waLink:
-      "https://wa.me/6285176965609?text=Halo%20saya%20ingin%20memesan%20PAKET%20GOLD",
-  },
-];
+import { useEffect, useState } from 'react';
+
+interface Fitur {
+  id: number;
+  id_paket: number;
+  fitur: string;
+}
+
+interface PackageAPI {
+  id: number;
+  name: string;
+  harga: string;
+  created_at: string;
+  updated_at: string;
+  fitur: Fitur[];
+}
+
+interface PackageUI {
+  name: string;
+  price: string;
+  features: string[];
+  button: string;
+  color: string;
+  waLink: string;
+}
 
 export default function PriceCard() {
+  const [packages, setPackages] = useState<PackageUI[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/paket')
+      .then(res => res.json())
+      .then((data: PackageAPI[]) => {
+        const mapped: PackageUI[] = data.map(pkg => ({
+          name: pkg.name,
+          price: pkg.harga,
+          features: pkg.fitur.map(f => f.fitur),
+          button: 'Pilih Paket',
+          color: getColorById(pkg.id),
+          waLink: `https://wa.me/6285176965609?text=Halo%20saya%20ingin%20memesan%20${encodeURIComponent(pkg.name)}`,
+        }));
+        setPackages(mapped);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to fetch packages:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  // Fungsi sederhana untuk kasih warna berdasarkan id paket
+  const getColorById = (id: number) => {
+    switch (id) {
+      case 1:
+        return 'bg-blue-100 text-blue-700';
+      case 2:
+        return 'bg-green-100 text-green-700';
+      case 3:
+        return 'bg-gray-100 text-gray-700';
+      case 4:
+        return 'bg-yellow-100 text-yellow-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-yellow-500">
+        <div className="loader"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6 py-16">
       <h2
@@ -73,7 +85,7 @@ export default function PriceCard() {
       </h2>
       <p
         data-aos="fade-up"
-        data-aos-delay="150"
+        data-aos-delay={150}
         className="text-gray-400 text-center max-w-2xl mb-12"
       >
         Sesuaikan kebutuhan proyekmu dengan paket yang kami sediakan. Harga
